@@ -1,18 +1,16 @@
 //
-//  AnnouncementInfoView.m
+//  AddNewsToGroupInfoView.m
 //  ATRIUM
 //
-//  Created by Admin on 11/10/15.
+//  Created by Admin on 11/23/15.
 //  Copyright (c) 2015 Global Solution. All rights reserved.
 //
 
-#import "AnnouncementInfoView.h"
-#import "Photo.h"
-
-@interface AnnouncementInfoView()<UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate, UITextViewDelegate>
+#import "AddNewsToGroupInfoView.h"
+@interface AddNewsToGroupInfoView()<UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate,UINavigationControllerDelegate, UITextViewDelegate>
 @end
 
-@implementation AnnouncementInfoView
+@implementation AddNewsToGroupInfoView
 - (void)createAndLayoutSubviews {
     left = 20.f;
     top = 0.f;
@@ -34,8 +32,8 @@
     //    self.profileImageView.layer.borderWidth = 1.0f;
     //    self.profileImageView.layer.borderColor = [UIColor blueColor].CGColor;
     self.profileImageView.backgroundColor = [UIColor whiteColor];
-//    self.profileImageView.image = [UIImage imageNamed:@"add_photo_student.png"];
-        [self.profileImageView sd_setImageWithURL:self.photoUrl placeholderImage:[UIImage imageNamed:@"add_photo_student.png"]];
+    //    self.profileImageView.image = [UIImage imageNamed:@"add_photo_student.png"];
+    [self.profileImageView sd_setImageWithURL:self.photoUrl placeholderImage:[UIImage imageNamed:@"add_photo_student.png"]];
     [self.profileImageBtn addSubview:self.profileImageView];
     //    self.profileImageBtn.backgroundColor = UIColorFromRGBWithAlpha(0x197373, 0.2);
     self.profileImageBtn.backgroundColor = [UIColor clearColor];
@@ -54,7 +52,7 @@
     CGFloat textViewHeight = 160;
     
     self.titleLabel = [self labelWithFrame:CGRectMake(left, top, labelWidth, labelHeight)
-                                     withTitle:[TRANSLATE(@"Announcement Name") uppercaseString]];
+                                 withTitle:[TRANSLATE(@"News Name") uppercaseString]];
     self.titleLabel.textColor = rgbColor(73, 108, 148);
     
     top += self.titleLabel.height;
@@ -64,7 +62,7 @@
     
     top += self.titleTextField.height;
     self.descriptionLabel = [self labelWithFrame:CGRectMake(left, top, labelWidth, labelHeight)
-                                            withTitle:[TRANSLATE(@"Announcement Description") uppercaseString]];
+                                       withTitle:[TRANSLATE(@"News Description") uppercaseString]];
     self.descriptionLabel.textColor = rgbColor(73, 108, 148);
     
     top += self.descriptionLabel.height;
@@ -119,9 +117,9 @@
             
             [self.profileImageView setImageWithURL:self.photoUrl placeholderImage:[UIImage imageNamed:@"add_photo_student.png"]
                        usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-//            self.photo = [[Photo alloc] initWithDictionary:responseDic[@"data"] error:nil];
-//            [self.profileImageView setImageWithURL:self.photo.url placeholderImage:[UIImage imageNamed:@"add_photo_teacher.png"]
-//                       usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            //            self.photo = [[Photo alloc] initWithDictionary:responseDic[@"data"] error:nil];
+            //            [self.profileImageView setImageWithURL:self.photo.url placeholderImage:[UIImage imageNamed:@"add_photo_teacher.png"]
+            //                       usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         }
     }];
 }
@@ -150,7 +148,7 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [self.navigationController dismissViewControllerAnimated:YES completion:^{
         UIImage *image = info[UIImagePickerControllerEditedImage];
-//        [self.profileImageView setImage:image];
+        //        [self.profileImageView setImage:image];
         [self uploadAndSetProfileImage:image];
     }];
     
@@ -202,19 +200,6 @@
 - (void)populatePatientDetails {
     [super populatePatientDetails];
     //    self.patientDetails.photo = self.photo;
-}
-
-- (BOOL)validateAndPopulatePatientDetails {
-    if ([super validateAndPopulatePatientDetails]) {
-        return YES;
-    }
-    if (self.photo == nil) {
-        [self.scrollView setContentOffset:CGPointMake(0, self.top) animated:YES];
-        ALERT(@"Please, upload your photo.");
-        return YES;
-    }
-    //    self.patientDetails.photo = self.photo;
-    return NO;
 }
 
 #pragma mark -

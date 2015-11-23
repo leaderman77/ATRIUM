@@ -22,20 +22,20 @@
 {
     
     GroupDetailsCell *cell = [tableView dequeueReusableCellWithIdentifier:[[GroupDetailsCell class] description]];
-    CGFloat left = 0;
+    CGFloat left = 15;
     CGFloat top = 0;
     if (!cell) {
         cell = [[GroupDetailsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[[GroupDetailsCell class] description]];
         cell.selectionStyle = UITableViewCellAccessoryNone;
         
         cell.dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(left, top, 280, 20)];
-        cell.dateLabel.font = FONT_SANSUMI_BOLD(15);
-        cell.dateLabel.textColor = rgbColor(0, 160, 227);           //colorWithRGB(25, 94, 180);
+        cell.dateLabel.font = FONT_SANSUMI(13);
+        cell.dateLabel.textColor = rgbColorWithAlpha(37, 66, 97, 0.7);         //colorWithRGB(25, 94, 180);
         [cell.contentView addSubview:cell.dateLabel];
         
         cell.detailsLabel = [[UILabel alloc] initWithFrame:CGRectMake(left, top + 20, 300, 30)];
-        cell.detailsLabel.textColor = rgbColorWithAlpha(0, 167, 227, 0.9);
-        cell.detailsLabel.font = FONT_SANSUMI(12);
+        cell.detailsLabel.textColor = rgbColor(37, 66, 97);
+        cell.detailsLabel.font = FONT_SANSUMI(18);
         [cell.contentView addSubview:cell.detailsLabel];
     }
     return cell;

@@ -9,16 +9,25 @@
 #import "GroupDetailsController.h"
 #import "GroupDetailsCell.h"
 #import "ChatsBottomViewController.h"
+#import "AddNewsToGroupController.h"
+#import "GroupNewsDetailsController.h"
 
-@interface GroupDetailsController ()<UITableViewDataSource, UITableViewDelegate>
+@interface GroupDetailsController ()<UITableViewDataSource, UITableViewDelegate, AddNewsToGroupDelegate>
 
 @property (nonatomic, strong) UIView *topView;
 
 @property (nonatomic, strong) UIView *mainView;
 @property (nonatomic, strong) UITableView *detailsTableView;
 
-@property (nonatomic, strong) NSMutableArray *detailsCell;
-@property (nonatomic, strong) NSMutableArray *dateCell;
+@property (nonatomic, strong) NSArray *newsTitle;
+
+
+@property (nonatomic, strong) NSArray *newsText;
+
+@property (nonatomic, strong) NSArray *newsAllDate;
+
+@property (nonatomic, strong) NSArray *newsPhoto;
+
 
 @property (nonatomic, strong) UIImageView *profileImageView;
 @property (nonatomic, strong) CustomBtn *profileImageBtn;
@@ -38,6 +47,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    
     [self configureNavigationBar];
     [self configureControls];
 }
@@ -52,7 +62,39 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+- (void)callApiMethods {
+    DLog(@"group details call api method called");
+    //todo add signature validating before submit!!
+    
+    [self.view showLoading:YES];
+    NSDictionary *param = @{@"id" : self.groupID};
+    [[RestClient sharedFormClient] callMethodByPath:METHOD_GROUP_BY_ID withHTTPMethodType:HTTP_POST withParameters:param
+                                           callback:^(NSDictionary *responseDic, NSError *error) {
+                                               DLog(@"success 1 fields");
+                                               [self.view showLoading:NO];
+                                               if (!error && [responseDic[@"status"] integerValue] == 1) {
+                                                   self.news = [[responseDic valueForKey:@"data"] valueForKey:@"news"];
+                                                   self.newsAllDate = [[responseDic valueForKey:@"data"] valueForKey:@"updatedAt"];
+                                                   int count;
+                                                   for (count = 0; count < self.news.count; count++) {
+                                                       self.newsTitle = [[[[responseDic valueForKey:@"data"] valueForKey:@"news"] objectAtIndex:count] valueForKey:@"title"];
+                                                    
+                                                       
+                                                       self.newsText = [[[[responseDic valueForKey:@"data"] valueForKey:@"news"] objectAtIndex:count] valueForKey:@"text"];
+                                                       
+                                                       
+                                                       self.newsPhoto = [[[[responseDic valueForKey:@"data"] valueForKey:@"news"] objectAtIndex:count] valueForKey:@"image"];
+                                                       
+                                                   }
+                                                   
+                                                   [self configureControls];
+                                               } else {
+                                                   [[RestClient sharedClient] showErrorMessage:responseDic];
+                                                   //                                               ALERT(@"Error with saving profile.");
+                                               }
+                                           }];
+    
+}
 - (void)configureNavigationBar {
     //    [super configureNavigationBar2];
     
@@ -65,9 +107,8 @@
     titleButton.titleLabel.font = FONT_SANSUMI_BOLD(14);
     [self.topView addSubview:titleButton];
     
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(15, 30, 16, 20)];
-//    backButton.layer.borderWidth = 1;
-    UIImageView *backImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, backButton.width, backButton.height)];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 30, 30, 30)];
+    UIImageView *backImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, backButton.width - 15, backButton.height - 10)];
 //    backImageView.layer.borderWidth = 1;
     [backImageView setImage:[UIImage imageNamed:@"arrow_icon.png"]];
     backImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -168,8 +209,8 @@
     self.postsLabel.layer.cornerRadius = 0.5;
     self.postsLabel.layer.masksToBounds = YES;
     self.postsLabel.backgroundColor = [UIColor clearColor];
-    
-    NSString *postNumString = TRANSLATE(self.groupPosts);
+    NSString *posts = [NSString stringWithFormat:@"%lu",(unsigned long)self.newsTitle.count];
+    NSString *postNumString = TRANSLATE(posts);
     NSMutableAttributedString *postNum = [[NSMutableAttributedString alloc]
                                                initWithAttributedString:[NSAttributedString attributedStringWithTitle:postNumString withTextColor:[UIColor whiteColor] withBoldFontSize:15]];
     NSString *postString = [TRANSLATE(@" Posts") uppercaseString];
@@ -202,28 +243,28 @@
 //    self.followersLabel .textColor = [UIColor whiteColor];         //colorWithRGB(25, 94, 180);
     [self.mainView addSubview:self.followersLabel ];
     
-//    self.dateCell = [[NSMutableArray array] initWithObjects:@"12.12.1992", @"12.12.1992", nil];
-//    self.detailsCell = [[NSMutableArray alloc]initWithObjects:@"Text", @"Text", nil];
+    
     //create table vew
-    self.detailsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 200, self.view.bounds.size.width, self.view.bounds.size.height - 125) style:UITableViewStyleGrouped];
-    //    self.chatTableView.layer.borderWidth = 2;
+    self.detailsTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 200, self.view.bounds.size.width, 280) style:UITableViewStylePlain];
+//    self.detailsTableView.layer.borderWidth = 2;
     self.detailsTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     self.detailsTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.detailsTableView.rowHeight = 60.f;
     self.detailsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.detailsTableView setDataSource:self];
     [self.detailsTableView setDelegate:self];
-    self.detailsTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f,self.view.frame.size.width, 10.0f)];
-    self.detailsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.detailsTableView.backgroundColor = [UIColor clearColor];
-    [self.detailsTableView registerClass:[GroupDetailsCell class] forCellReuseIdentifier: @"GroupDetailsCell"];
+//    [self.detailsTableView registerClass:[GroupDetailsCell class] forCellReuseIdentifier: @"GroupDetailsCell"];
     [self.view addSubview:self.detailsTableView];
 }
 - (IBAction)backButtonClicked:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
 - (IBAction)addButtonClicked:(id)sender {
-    
+    AddNewsToGroupController *addNewsToGroupController = [[AddNewsToGroupController alloc]init];
+    addNewsToGroupController.groupID = self.groupID;
+    addNewsToGroupController.delegate = self;
+    [self.navigationController pushViewController:addNewsToGroupController animated:YES];
 }
 - (void)followButtonClicked:(id)sender {
     DLog(@"group add member method clicked");
@@ -274,19 +315,19 @@
     
 }
 #pragma mark - Table view data source
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
     return 1;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 30.0f;
+    return 0.0001;
 }
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return self.detailsCell.count;
+    return self.newsTitle.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -294,18 +335,32 @@
     GroupDetailsCell *cell = [GroupDetailsCell cellForTableView:tableView withItem:nil];
     cell.baseDelegate = self;
     cell.indexPath = indexPath;
-    cell.dateLabel.text = self.dateCell[indexPath.row];
-    cell.detailsLabel.text = self.detailsCell[indexPath.row];
+    NSString *string = [NSString stringWithFormat:@"%@", [self.newsAllDate objectAtIndex:0]];
+    NSString *stringDate = [string substringToIndex:[string length] - 14];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    NSDate *date = [formatter dateFromString:stringDate];
+    
+    NSDateFormatter *formatter1 = [[NSDateFormatter alloc] init];
+    [formatter1 setDateFormat:@"dd.MM.yyyy"];
+    cell.dateLabel.text = [formatter1 stringFromDate:date];
+    cell.detailsLabel.text = self.newsTitle[indexPath.row];
     
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    AnnouncementDetailsController *announcementDetailsController = [[AnnouncementDetailsController alloc]init];
-//    if ([self.announceDelegate respondsToSelector:@selector(openAnnounceDetailsController:)]) {
-//        [self.announceDelegate openAnnounceDetailsController:announcementDetailsController];
-//    }
-    //    [self.navigationController pushViewController:announcementDetailsController animated:YES];
+    GroupNewsDetailsController *groupNewsDetailsController = [[GroupNewsDetailsController alloc]init];
+    self.photoUrl = self.newsPhoto[indexPath.row];
+    groupNewsDetailsController.photoUrl = self.photoUrl;
+    groupNewsDetailsController.groupNewsTitle = self.newsTitle[indexPath.row];
+    groupNewsDetailsController.groupNewstext = self.newsText[indexPath.row];
+    [self.navigationController pushViewController:groupNewsDetailsController animated:YES];
+}
+- (void)callApiGroupRefreshMethod {
+    [self callApiMethods];
+    [self configureControls];
 }
 /*
 #pragma mark - Navigation

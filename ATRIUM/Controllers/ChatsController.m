@@ -15,7 +15,6 @@
 #import "UserChatController.h"
 #import "GroupDetailsController.h"
 
-
 @interface ChatsController ()<UITableViewDelegate, UITableViewDataSource, BaseRightSearchViewDelegate, AddGroupDelegate, AddGroupChatDelegate, GroupDetailsDelegate>
 @property (nonatomic, strong) UITableView *chatsListTableView;
 @property (nonatomic, strong) UIView *topView;
@@ -331,6 +330,7 @@
         groupDetailsController.groupFollowers = [NSString stringWithFormat:@"%lu", (unsigned long)array.count];
         NSArray *grPosts = self.posts[indexPath.row];
         groupDetailsController.groupPosts = [NSString stringWithFormat:@"%lu", (unsigned long)grPosts.count];
+        [groupDetailsController callApiMethods];
         
         if ([self.userID isEqualToString:self.allCreatorID[indexPath.row]]) {
             groupDetailsController.userType = 0;
@@ -372,20 +372,17 @@
 
 - (void)callAppMethodOfGroupChatLists {
     [self callApiMethods];
-    [self getGroups];
 }
 #pragma mark Chat Lists Delegate methods
 
 - (void)callAppMethodOfChatLists {
     [self callApiMethods];
-    [self getGroups];
 }
 
 #pragma mark GroupDetailsController Delegate methods
 
 - (void)callApiChatsRefreashMethod {
     [self callApiMethods];
-    [self getGroups];
 }
 
 - (void)windowViewTapped:(id)sender {

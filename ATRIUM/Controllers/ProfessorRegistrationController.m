@@ -8,7 +8,7 @@
 
 #import "ProfessorRegistrationController.h"
 #import "ItemsPopover.h"
-#import "HomeViewTabBarController.h"
+//#import "HomeViewTabBarController.h"
 #import "ChatsBottomView.h"
 #import "ProfessorRegistrationInfoView.h"
 
@@ -385,18 +385,18 @@
                                            }
                                        }];
 }
-- (IBAction)profileImageClicked:(id)sender {
-    HomeViewTabBarController *dateVC = [[HomeViewTabBarController alloc]initWithNibName:@"HomeViewTabBarController.xib" bundle:nil];
-    UINavigationController *destNav = [[UINavigationController alloc] initWithRootViewController:dateVC];/*Here dateVC is controller you want to show in popover*/
-    dateVC.preferredContentSize = CGSizeMake(280,200);
-    destNav.modalPresentationStyle = UIModalPresentationPopover;
-    _dateTimePopover8 = destNav.popoverPresentationController;
-    _dateTimePopover8.delegate = self;
-    _dateTimePopover8.sourceView = self.view;
-//    _dateTimePopover8.sourceRect = sender.frame;
-    destNav.navigationBarHidden = YES;
-    [self presentViewController:destNav animated:YES completion:nil];
-}
+//- (IBAction)profileImageClicked:(id)sender {
+//    HomeViewTabBarController *dateVC = [[HomeViewTabBarController alloc]initWithNibName:@"HomeViewTabBarController.xib" bundle:nil];
+//    UINavigationController *destNav = [[UINavigationController alloc] initWithRootViewController:dateVC];/*Here dateVC is controller you want to show in popover*/
+//    dateVC.preferredContentSize = CGSizeMake(280,200);
+//    destNav.modalPresentationStyle = UIModalPresentationPopover;
+//    _dateTimePopover8 = destNav.popoverPresentationController;
+//    _dateTimePopover8.delegate = self;
+//    _dateTimePopover8.sourceView = self.view;
+////    _dateTimePopover8.sourceRect = sender.frame;
+//    destNav.navigationBarHidden = YES;
+//    [self presentViewController:destNav animated:YES completion:nil];
+//}
 
 - (UIModalPresentationStyle) adaptivePresentationStyleForPresentationController: (UIPresentationController * ) controller {
     return UIModalPresentationNone;

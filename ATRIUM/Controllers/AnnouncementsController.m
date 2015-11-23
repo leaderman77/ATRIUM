@@ -276,8 +276,10 @@
 {
     AnnouncementDetailsController *announcementDetailsController = [[AnnouncementDetailsController alloc]init];
     self.photoUrl = self.myAnnouncePhotos[indexPath.row];
+    announcementDetailsController.isViewMode = YES;
     announcementDetailsController.photoUrl = self.photoUrl;
     announcementDetailsController.myAnnounceText = self.myAnnounceText[indexPath.row];
+    announcementDetailsController.announceTitle = self.myAnnounceTitle[indexPath.row];
     if ([self.announceDelegate respondsToSelector:@selector(openAnnounceDetailsController:)]) {
         [self.announceDelegate openAnnounceDetailsController:announcementDetailsController];
     }

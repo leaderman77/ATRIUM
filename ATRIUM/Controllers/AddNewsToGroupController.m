@@ -1,15 +1,15 @@
 //
-//  AddAnnouncementController.m
+//  AddNewsToGroupController.m
 //  ATRIUM
 //
-//  Created by Admin on 10/14/15.
+//  Created by Admin on 11/23/15.
 //  Copyright (c) 2015 Global Solution. All rights reserved.
 //
 
-#import "AddAnnouncementController.h"
-#import "AnnouncementInfoView.h"
+#import "AddNewsToGroupController.h"
+#import "AddNewsToGroupInfoView.h"
 
-@interface AddAnnouncementController () <BaseInfoViewDelegate>
+@interface AddNewsToGroupController ()<BaseInfoViewDelegate>
 @property (nonatomic, strong) UIView *topView;
 @property (nonatomic, strong) UIScrollView *scrollView;
 
@@ -22,11 +22,12 @@
 @property (retain, nonatomic) UILabel *descriptionLabel;
 @property (strong, nonatomic) UITextView *descriptionTextView;
 
-@property (nonatomic, strong) AnnouncementInfoView *announcementInfoView;
+@property (nonatomic, strong) AddNewsToGroupInfoView *addNewsToGroupInfoView;
 @property (nonatomic, strong) UITextField *activeTextField;
+
 @end
 
-@implementation AddAnnouncementController
+@implementation AddNewsToGroupController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -34,13 +35,13 @@
     
     [self configureControls];
     [self configureNavigationBar];
-    
 }
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
-
-//    self.navigationController.navigationBar.barTintColor = rgbColor(255, 255, 255);
+    
+    //    self.navigationController.navigationBar.barTintColor = rgbColor(255, 255, 255);
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -52,7 +53,7 @@
     self.topView.backgroundColor = rgbColor(22, 168, 235);
     
     UIButton *titleButton = [[UIButton alloc] initWithFrame:CGRectMake(60, 25, 200, 30)];
-    titleButton.text = [TRANSLATE(@"New announcement") uppercaseString];
+    titleButton.text = [TRANSLATE(@"New news") uppercaseString];
     titleButton.titleColor = rgbColor(255, 255, 255);
     titleButton.titleLabel.font = FONT_SANSUMI_BOLD(14);
     [self.topView addSubview:titleButton];
@@ -64,8 +65,6 @@
     [backButton addSubview:backImageView];
     [backButton addTarget:self action:@selector(backButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.topView addSubview:backButton];
-    
-    
     
     UIButton *approveButton = [[UIButton alloc] initWithFrame:CGRectMake(285, 25, 30, 30)];
     UIImageView *approveImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, approveButton.width, approveButton.height)];
@@ -79,12 +78,12 @@
 }
 
 - (void)configureControls {
-//    [super configureControls];
+    //    [super configureControls];
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 55, self.view.bounds.size.width, self.view.bounds.size.height)];
-//    self.scrollView.layer.borderWidth = 2;
-//    self.scrollView.top = kPortraitNavbarHeight + 50;
-//    self.scrollView.height -= self.scrollView.top;
+    //    self.scrollView.layer.borderWidth = 2;
+    //    self.scrollView.top = kPortraitNavbarHeight + 50;
+    //    self.scrollView.height -= self.scrollView.top;
     self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.scrollView.backgroundColor = rgbColor(255, 255, 255);
     self.scrollView.showsVerticalScrollIndicator = NO;
@@ -95,13 +94,13 @@
     CGFloat left = 10.f;
     CGFloat top = 0.f;
     
-    self.announcementInfoView = [[AnnouncementInfoView alloc] initWithFrame:CGRectMake(left, top, 300, self.scrollView.height)];
+    self.addNewsToGroupInfoView = [[AddNewsToGroupInfoView alloc] initWithFrame:CGRectMake(left, top, 300, self.scrollView.height)];
     //    self.professorRegisterInfoView.layer.borderWidth = 2;
-    self.announcementInfoView.baseDelegate = self;
-    self.announcementInfoView.navigationController = self.navigationController;
-    self.announcementInfoView.viewController = self;
-    [self.announcementInfoView createAndLayoutSubviews];
-    [self.scrollView addSubview:self.announcementInfoView];
+    self.addNewsToGroupInfoView.baseDelegate = self;
+    self.addNewsToGroupInfoView.navigationController = self.navigationController;
+    self.addNewsToGroupInfoView.viewController = self;
+    [self.addNewsToGroupInfoView createAndLayoutSubviews];
+    [self.scrollView addSubview:self.addNewsToGroupInfoView];
     
     self.scrollView.contentSize = CGSizeMake(0, 650);
     self.scrollView.scrollEnabled = YES;
@@ -117,23 +116,20 @@
     [self.view showLoading:YES];
     
     NSMutableDictionary *paramsDic = [NSMutableDictionary dictionary];
+    [paramsDic addEntriesFromDictionary:@{@"News[title]" : self.addNewsToGroupInfoView.titleTextField.text,
+                                          @"News[text]" : self.addNewsToGroupInfoView.descriptionTextView.text,
+                                          @"News[image]" : self.addNewsToGroupInfoView.profilePhoto,
+                                          @"id" : self.groupID}];
     
-    NSUserDefaults *userdefaults2 = [NSUserDefaults standardUserDefaults];
-    NSString *userId = [userdefaults2 objectForKey:@"userID"];
-    
-    [paramsDic addEntriesFromDictionary:@{@"Ad[title]" : self.announcementInfoView.titleTextField.text,
-                                          @"Ad[text]" : self.announcementInfoView.descriptionTextView.text,
-                                          @"Ad[photo]" : self.announcementInfoView.profilePhoto,
-                                          @"user" : userId}];
-    //
-    [[RestClient sharedFormClient] callMethodByPath:METHOD_ADD_ANNOUNCEMENT withHTTPMethodType:HTTP_POST withParameters:paramsDic
+    [[RestClient sharedFormClient] callMethodByPath:METHOD_ADD_NEWS_TO_GROUP withHTTPMethodType:HTTP_POST withParameters:paramsDic
                                            callback:^(NSDictionary *responseDic, NSError *error) {
                                                [self.view showLoading:NO];
                                                if (!error) {
                                                    DLog(@"success 1 fields");
-                                                   if ([self.delegate respondsToSelector:@selector(callAppMethodOfAnnounce)]) {
-                                                       [self.delegate callAppMethodOfAnnounce];
+                                                   if ([self.delegate respondsToSelector:@selector(callApiGroupRefreshMethod)]) {
+                                                       [self.delegate callApiGroupRefreshMethod];
                                                    }
+                                                
                                                    [self.navigationController popViewControllerAnimated:YES];
                                                } else {
                                                    //                                               [[RestClient sharedClient] showErrorMessage:responseDic];
@@ -148,7 +144,7 @@
 }
 #pragma mark Base Info View Cases
 
-- (void)baseInfoView:(AnnouncementInfoView *)infoView withActionType:(NSInteger)actionType withValue:(id)value {
+- (void)baseInfoView:(AddNewsToGroupInfoView *)infoView withActionType:(NSInteger)actionType withValue:(id)value {
     switch (actionType) {
         case 1:
             self.activeTextField = value;
@@ -170,6 +166,8 @@
             break;
     }
 }
+
+
 /*
 #pragma mark - Navigation
 

@@ -21,7 +21,11 @@
 @property (nonatomic, strong) NSString *groupFollowers;
 @property (nonatomic, strong) NSString *groupPosts;
 @property (nonatomic, strong) NSURL *photoUrl;
+@property (nonatomic, strong) NSArray *news;
+
 @property (nonatomic) NSInteger userType;
 
 @property (nonatomic, weak) id <GroupDetailsDelegate> delegate;
+
+- (void)callApiMethods;
 @end

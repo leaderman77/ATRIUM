@@ -17,5 +17,10 @@
 @interface AnnouncementDetailsController : BaseController
 @property (nonatomic, weak) id <AnnounceDetailsControllerDelegate> delegate;
 @property (nonatomic, strong) NSString *myAnnounceText;
+@property (nonatomic, strong) NSString *announceTitle;
+@property (nonatomic, strong) NSString *announceCreateBy;
 @property (nonatomic, strong) NSURL *photoUrl;
+@property (nonatomic, assign) BOOL isViewMode;
+
+- (void)setIsViewMode:(BOOL)isViewMode;
 @end

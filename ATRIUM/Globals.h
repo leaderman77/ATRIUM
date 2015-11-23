@@ -264,10 +264,12 @@ typedef void (^CompletedEditBlock)(id object);
 #define METHOD_GET_GROUP                        @"/getGroupByUser"
 #define METHOD_GET_ALL_GROUP                    @"/getAllGroups"
 #define METHOD_ADD_GROUP_MEMBER                 @"/addGroupMember"
-#define METHOD_REMOVE_GROUP_MEMBER                 @"/removeGroupMember"
+#define METHOD_REMOVE_GROUP_MEMBER              @"/removeGroupMember"
 #define METHOD_ADD_GROUP                        @"/addGroup"
 #define METHOD_FIND_USERS                       @"/findUsers"
 #define METHOD_ADD_GROUP_CHAT_MEMBER            @"/addGroupChatMember"
+#define METHOD_ADD_NEWS_TO_GROUP                @"/addNewsToGroup"
+#define METHOD_GROUP_BY_ID                      @"/getGroup"
 
 
 
