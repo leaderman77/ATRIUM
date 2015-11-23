@@ -1,0 +1,64 @@
+//
+//  ATRIUM-Prefix.pch
+//  ATRIUM
+//
+//  Created by Admin on 10/9/15.
+//  Copyright (c) 2015 Global Solution. All rights reserved.
+//
+#import <Availability.h>
+
+//#ifndef ATRIUM_ATRIUM_Prefix_pch
+#define ATRIUM_ATRIUM_Prefix_pch
+#ifndef __IPHONE_5_0
+#warning "This project uses features only available in iOS SDK 5.0 and later."
+#endif
+
+#ifdef __OBJC__
+
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "Globals.h"
+#import "NSUserDefaults+Additions.h"
+#import "NSString+MD5Addition.h"
+#import "UIDevice+IdentifierAddition.h"
+#import "UIView+Borders.h"
+#import "UIView+ViewAddition.h"
+#import "UIViewController+Additions.h"
+#import "MBProgressHUD.h"
+#import "UIButton+Additions.h"
+#import "RestClient.h"
+//#import "SMPageControl.h"
+#import "SettingsManager.h"
+#import "NSData+Base64.h"
+//#import "NSDate+DateAddition.h"
+#import "UIButton+BarBtnAdditions.h"
+#import "NSAttributedString+TextAdditions.h"
+#import "NSMutableAttributedString+TextAdditions.h"
+
+#import "UITextField+Validate.h"
+#import "NSString+StringMetrics.h"
+#import "UIView+UIView_Snapshots.h"
+
+#import "UIImage+UIImageAddition.h"
+#import "UIAlertView+Blocks.h"
+#import "UIView+ColorOfPoint.h"
+#import "CustomBtn.h"
+
+#import "UIActionSheet+Blocks.h"
+
+#import "NSMutableArray+Addition.h"
+#import "SelectItem.h"
+
+#import "CustomTextField.h"
+#import "UIImageView+HighlightedWebCache.h"
+#import "UIImageView+WebCache.h"
+#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
+#import "UIImage+UIImageAddition.h"
+#import "UIAlertView+Blocks.h"
+#import "UIView+ColorOfPoint.h"
+#import "UIColor+Additions.h"
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#endif
