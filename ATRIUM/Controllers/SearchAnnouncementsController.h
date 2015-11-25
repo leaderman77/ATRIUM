@@ -13,6 +13,7 @@
 @property (nonatomic, retain) NSMutableArray *announceNames;
 @property (nonatomic, retain) NSMutableArray *announceDescription;
 @property (nonatomic, retain) NSMutableArray *createdDate;
+@property (nonatomic, retain) NSMutableArray *announceText;
 @property (nonatomic, retain) NSMutableArray *announcePhoto;
 
 - (void)callApiMethods;

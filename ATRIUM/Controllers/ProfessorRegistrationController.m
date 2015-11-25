@@ -75,7 +75,7 @@
     self.topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 60)];
     self.topView.backgroundColor = rgbColor(22, 168, 235);
     
-    UIButton *titleButton = [[UIButton alloc] initWithFrame:CGRectMake(50, 25, 230, 30)];
+    UIButton *titleButton = [[UIButton alloc] initWithFrame:CGRectMake(40, 25, 240, 30)];
     titleButton.text = [TRANSLATE(@"New Faculty Member") uppercaseString];
     titleButton.titleColor = rgbColor(255, 255, 255);
     titleButton.titleLabel.font = FONT_SANSUMI_BOLD(14);

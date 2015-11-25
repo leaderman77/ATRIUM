@@ -30,7 +30,7 @@
         cell.selectionStyle = UITableViewCellAccessoryNone;
         cell.contentView.backgroundColor = rgbColor(22, 168, 235);
         
-        cell.userName = [[UILabel alloc] initWithFrame:CGRectMake(left, 0, 200, 30)];
+        cell.userName = [[UILabel alloc] initWithFrame:CGRectMake(left, 0, 190, 30)];
         //        cell.announceDescLabel.layer.borderWidth = 1;
         cell.userName.backgroundColor = [UIColor clearColor];
         cell.userName.textColor = [UIColor whiteColor];
@@ -38,11 +38,12 @@
         cell.userName.font = FONT_SANSUMI_BOLD(14);
         [cell.contentView addSubview:cell.userName];
         
-        cell.userPosition = [[UILabel alloc] initWithFrame:CGRectMake(left + cell.userName.width + 10, top, 110, 30)];
-        //        cell.announceDescLabel.layer.borderWidth = 1;
+        cell.userPosition = [[UILabel alloc] initWithFrame:CGRectMake(left + cell.userName.width, top, 105, 30)];
+//        cell.userPosition.layer.borderWidth = 1;
         cell.userPosition.backgroundColor = [UIColor clearColor];
         cell.userPosition.textColor = [UIColor whiteColor];
-        cell.userPosition.font = FONT_SANSUMI(12);
+        cell.userPosition.textAlignment = NSTextAlignmentRight;
+        cell.userPosition.font = FONT_SANSUMI(10);
         [cell.contentView addSubview:cell.userPosition];
         
         

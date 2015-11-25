@@ -270,6 +270,8 @@ typedef void (^CompletedEditBlock)(id object);
 #define METHOD_ADD_GROUP_CHAT_MEMBER            @"/addGroupChatMember"
 #define METHOD_ADD_NEWS_TO_GROUP                @"/addNewsToGroup"
 #define METHOD_GROUP_BY_ID                      @"/getGroup"
+#define METHOD_SEND_GROUP_CHAT_MESSAGE          @"/addMessage"
+#define METHOD_GET_GROUP_CHAT_MESSAGE           @"/getGroupChatMessages"
 
 
 

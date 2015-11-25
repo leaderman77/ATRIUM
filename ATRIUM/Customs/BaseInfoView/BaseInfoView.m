@@ -38,7 +38,7 @@
     textField.layer.masksToBounds = YES;
 //    textField.layer.borderColor = BORDER_GRAY_COLOR.CGColor;
 //    textField.layer.borderWidth = self.isViewMode ? 0.f : 1.f;
-    textField.font = !self.isViewMode ? FONT_SANSUMI_BOLD(14.f) : FONT_SANSUMI(14.f);
+    textField.font = FONT_SANSUMI(16.f);
     textField.textColor = self.isViewMode ? [UIColor whiteColor] : [UIColor blackColor];
     textField.autocorrectionType = UITextAutocorrectionTypeNo;
 

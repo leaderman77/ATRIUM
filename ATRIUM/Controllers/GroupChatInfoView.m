@@ -118,7 +118,7 @@
     
     top += self.chatTitleTextField.height;
     self.addMemberLabel = [self labelWithFrame:CGRectMake(left + 10, top, labelWidth, labelHeight)
-                                            withTitle:[TRANSLATE(@"Add Members") uppercaseString]];
+                                            withTitle:[TRANSLATE(@"Add members") uppercaseString]];
     self.addMemberLabel.textColor = rgbColor(37, 66, 97);
     
 //    self.members = [[NSMutableArray alloc]initWithObjects:@"James Bont", @"Abrahm Lincoln", nil];

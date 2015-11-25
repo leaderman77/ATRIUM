@@ -22,9 +22,6 @@
 @property (nonatomic, retain) UIButton *titleViewButton;
 
 @property (retain, nonatomic) UILabel *sectionLabel;
-@property (nonatomic, retain) NSMutableArray *announcementTypes;
-
-@property (nonatomic, retain) NSMutableArray *announceDescribtionTypes;
 
 @property (nonatomic, retain) NSMutableArray *listSection;
 @property (nonatomic, retain) UIToolbar *toolbar;
@@ -35,6 +32,14 @@
 @property (nonatomic, retain) UIButton *announceSearchButton;
 @property (nonatomic, retain) AnnounceList *announceList;
 @property (nonatomic, retain) AddAnnouncementController *addAnnounceController;
+
+@property (nonatomic, retain) NSMutableArray *myAnnounceTitle;
+@property (nonatomic, retain) NSMutableArray *myAnnounceCreatedDate;
+
+@property (nonatomic, retain) NSArray *title;
+@property (nonatomic, retain) NSString *myAnnounceName;
+@property (nonatomic, retain) NSString *createdDate;
+
 @end
 
 @implementation AnnouncementsController
@@ -46,7 +51,7 @@
     self.myAnnounceTitle = [[NSMutableArray alloc]init];
     self.myAnnounceCreatedDate = [[NSMutableArray alloc]init];
     self.myAnnouncePhotos = [[NSMutableArray alloc]init];
-    
+    self.myAnnounceText = [[NSMutableArray alloc]init];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveTestNotification:)
@@ -60,19 +65,19 @@
 }
 - (void) receiveTestNotification:(NSNotification *) notification
 {
-    self.myAnnounceTitle = [[NSMutableArray alloc]init];
-    self.myAnnounceCreatedDate = [[NSMutableArray alloc]init];
-    self.myAnnouncePhotos = [[NSMutableArray alloc]init];
-    
     NSString *title = [notification.userInfo valueForKey:@"title"];
     NSString *date = [notification.userInfo valueForKey:@"date"];
     NSURL *photo = [notification.userInfo valueForKey:@"photo"];
-    int count = self.myAnnounceTitle.count;
+    NSString *text = [notification.userInfo valueForKey:@"text"];
     
+//    [self.myAnnounceTitle addObject:title];
+//    [self.myAnnounceCreatedDate addObject:date];
+//    [self.myAnnouncePhotos addObject:photo];
     
-    [self.myAnnounceTitle insertObject:title atIndex:count];
-    [self.myAnnounceCreatedDate insertObject:date atIndex:count];
-    [self.myAnnouncePhotos insertObject:photo atIndex:count];
+    [self.myAnnounceTitle insertObject:title atIndex:0];
+    [self.myAnnounceCreatedDate insertObject:date atIndex:0];
+    [self.myAnnouncePhotos insertObject:photo atIndex:0];
+    [self.myAnnounceText addObject:text];
     
     if ([[notification name] isEqualToString:@"MyAnnouncements"])
         NSLog (@"Successfully received the test notification!");
@@ -139,10 +144,18 @@
                                                    DLog(@"success 1 fields");
                                                    NSArray *array = [responseDic valueForKey:@"data"];
                                                    if (array.count != 0) {
-                                                       self.myAnnounceTitle = [[responseDic valueForKey:@"data"] valueForKey:@"title"];
-                                                       self.myAnnounceCreatedDate = [[responseDic valueForKey:@"data"] valueForKey:@"createdAt"];
-                                                       self.myAnnounceText = [[responseDic valueForKey:@"data"] valueForKey:@"text"];
-                                                       self.myAnnouncePhotos = [[responseDic valueForKey:@"data"] valueForKey:@"photo"];
+                                                       self.title = [[responseDic valueForKey:@"data"] valueForKey:@"title"];
+                                                       int count;
+                                                       for (count = 0; count < self.title.count; count++) {
+                                                           self.myAnnounceName = [[[responseDic valueForKey:@"data"] valueForKey:@"title"] objectAtIndex:count];
+                                                           [self.myAnnounceTitle addObject:self.myAnnounceName];
+                                                           self.createdDate = [[[responseDic valueForKey:@"data"] valueForKey:@"createdAt"] objectAtIndex:count];
+                                                           [self.myAnnounceCreatedDate addObject:self.createdDate];
+                                                           self.text = [[[responseDic valueForKey:@"data"] valueForKey:@"text"] objectAtIndex:count];
+                                                           [self.myAnnounceText addObject:self.text];
+                                                           self.photos = [[[responseDic valueForKey:@"data"] valueForKey:@"photo"] objectAtIndex:count];
+                                                           [self.myAnnouncePhotos addObject:self.photos];
+                                                       }
                                                        
                                                        //                                                   self.announceList = [[AnnounceList alloc]initWithDictionary:responseDic[@"data"] error:nil];
                                                        
@@ -169,7 +182,7 @@
 //    [self.announceListTableView setContentOffset:CGPointZero animated:YES];
 //    self.announceListTableView.layer.borderWidth = 2;
     self.announceListTableView.allowsSelectionDuringEditing = YES;
-    self.announceListTableView.rowHeight = 40;
+    self.announceListTableView.rowHeight = 60;
     self.announceListTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     self.announceListTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.announceListTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -224,7 +237,7 @@
     [view addSubview:label];
     [view setBackgroundColor:rgbColor(236, 243, 251)];
     if (section == 1) {
-        UIButton *addAnnouncment = [[UIButton alloc] initWithFrame:CGRectMake(285, 8, 25, 25)];
+        UIButton *addAnnouncment = [[UIButton alloc] initWithFrame:CGRectMake(270, 8, 25, 25)];
         //    self.signInBtn.layer.borderWidth = 1.f;
         addAnnouncment.layer.cornerRadius = 5.f;
         addAnnouncment.backgroundColor = [UIColor clearColor];
@@ -250,13 +263,16 @@
     cell.baseDelegate = self;
     cell.indexPath = indexPath;
     if ((indexPath.section == 0) && (self.titleArray != nil) && (self.fullNameArray == nil))  {     //&& (self.titleArray != nil) && (self.fullNameArray != nil))
-        cell.announceNameLabel.text = [NSString stringWithFormat:@"%@", [self.titleArray objectAtIndex:indexPath.row]];
+        NSString *trendingAnnounceTitle = [NSString stringWithFormat:@"%@", [self.titleArray objectAtIndex:indexPath.row]];
+        cell.announceNameLabel.text = [TRANSLATE(trendingAnnounceTitle) uppercaseString];
         cell.announceDescLabel.text = [NSString stringWithFormat:@"%@", [self.fullNameArray objectAtIndex:indexPath.row]];
     } else if ((indexPath.section == 1) &&(self.myAnnounceTitle != nil) && (self.myAnnounceCreatedDate != nil)) {
         self.photoUrl = self.myAnnouncePhotos[indexPath.row];
         [cell.announceImageView setImageWithURL:self.photoUrl placeholderImage:[UIImage imageNamed:@"add_photo_student.png"]
                                           usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        cell.announceNameLabel.text = [NSString stringWithFormat:@"%@", [self.myAnnounceTitle objectAtIndex:indexPath.row]];
+        
+        NSString *myAnnounceTitle = [NSString stringWithFormat:@"%@", [self.myAnnounceTitle objectAtIndex:indexPath.row]];
+        cell.announceNameLabel.text = [TRANSLATE(myAnnounceTitle) uppercaseString];
         NSString *string = [NSString stringWithFormat:@"%@", [self.myAnnounceCreatedDate objectAtIndex:indexPath.row]];
         NSString *stringDate = [string substringToIndex:[string length] - 14];
         

@@ -107,7 +107,7 @@
     [self.scrollView addSubview:self.logoutButton];
     
     self.scrollView.contentSize = CGSizeMake(0, 550);
-    self.scrollView.scrollEnabled = YES;
+    self.scrollView.scrollEnabled = !self.isViewMode;
 //    [self.scrollView setContentOffset:CGPointMake(0, 600) animated:YES];
 
 }
@@ -122,7 +122,7 @@
         [self.approveButton addTarget:self action:@selector(saveButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         
     }
-
+     self.scrollView.scrollEnabled = !self.isViewMode;
 }
 - (void)presentImagePickerController:(UIImagePickerController *)imagePickerController {
     //    [self.navigationController presentViewController:imagePickerController animated:YES completion:nil];

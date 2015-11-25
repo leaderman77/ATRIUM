@@ -153,7 +153,7 @@
     [self.profileImageView setImageWithURL:self.photoUrl placeholderImage:[UIImage imageNamed:@"add_photo_teacher.png"]
                usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [self populateTextField:self.positionTextField withText:position];
-    [self populateTextField:self.emailTextField withText:email];
+    [self populateTextField:self.emailTextField withText:[TRANSLATE(email) uppercaseString]];
     [self populateTextField:self.dobDateTextField withText:dob];
     [self populateTextField:self.phoneTextField withText:phone];
 }
@@ -183,8 +183,8 @@
     textField.enabled = !self.isViewMode;
 //    textField.borderStyle = UITextBorderStyleNone;
     //    textField.layer.borderWidth = self.isViewMode ? 0.f : 1.f;
-    textField.font = self.isViewMode ? FONT_SANSUMI_BOLD(14.f) : FONT_SANSUMI(14.f);
-    textField.textColor = self.isViewMode ? [UIColor whiteColor] : [UIColor blackColor];
+    textField.font = FONT_SANSUMI(16.f);
+    textField.textColor = [UIColor whiteColor];
     textField.leftViewMode = self.isViewMode ? UITextFieldViewModeNever : UITextFieldViewModeAlways;
     self.positionTextField.placeholder = self.isViewMode ? @"LITERATURE TEACHER" : @"";
     self.dobDateTextField.rightViewMode = !self.isViewMode ? UITextFieldViewModeNever : UITextFieldViewModeAlways;
@@ -211,7 +211,7 @@
 - (NSArray *)pickerData {
     
     if (!_pickerData) {
-        _pickerData = @[@"Teacher", @"Dean", @"Research assistant", @"Course leader", @"Course assistant"];
+        _pickerData = @[[TRANSLATE(@"Teacher") uppercaseString], [TRANSLATE(@"Dean") uppercaseString], [TRANSLATE(@"Research assistant") uppercaseString], [TRANSLATE(@"Course leader") uppercaseString], [TRANSLATE(@"Course assistant") uppercaseString]];
     }
     return _pickerData;
 }

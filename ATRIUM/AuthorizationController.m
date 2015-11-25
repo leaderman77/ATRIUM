@@ -54,27 +54,33 @@
 }
 
 - (void)configureControls {
-//    [super configureControls];
+    CGFloat top = 60;
+    CGFloat left = 10;
     CGFloat height = 35;
+    CGFloat labelHeight = 30;
+    CGFloat labelWidth = 300;
     //create language select button
-    self.signInLabel = [[UILabel alloc]initWithFrame:CGRectMake(80, 60, 250, 30)];
+    self.signInLabel = [[UILabel alloc]initWithFrame:CGRectMake(left, top, labelWidth, labelHeight)];
+//    self.signInLabel.layer.borderWidth = 1;
+    self.signInLabel.textAlignment = NSTextAlignmentCenter;
     self.signInLabel.font = FONT_SANSUMI_BOLD(16);
     self.signInLabel.textColor = rgbColor(255, 255, 255);
-    self.signInLabel.text = @"PLEASE, SIGN IN";
+    self.signInLabel.text = [TRANSLATE(@"Please, sign in") uppercaseString];
     //    self.loginTitleLabel.hidden = YES;
     self.signInLabel.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.signInLabel];
     
     //create english language select button
-    self.createAccountButton = [[UIButton alloc] initWithFrame:CGRectMake(55, 80, 205, 35)];
+    self.createAccountButton = [[UIButton alloc] initWithFrame:CGRectMake(left, 80, labelWidth, height)];
 //    self.createAccountButton.layer.borderWidth = 1.f;
     self.createAccountButton.layer.cornerRadius = 5.f;
     self.createAccountButton.backgroundColor = [UIColor clearColor];
     self.createAccountButton.titleColor = [UIColor whiteColor];
     self.createAccountButton.titleLabel.font = FONT_SANSUMI(14);
-    self.createAccountButton.title = @"OR SET UP A NEW ACCOUNT";
+    self.createAccountButton.title = [TRANSLATE(@"Or set up a new account") uppercaseString];
+    [self.createAccountButton.titleLabel setTextAlignment: NSTextAlignmentCenter];
     self.createAccountButton.enabled = YES;
-    [self.createAccountButton addBottomBorderWithHeight:1 andColor:[UIColor whiteColor]];
+    [self.createAccountButton addBottomBorderWithHeight:1 color:[UIColor whiteColor] leftOffset:30 rightOffset:30 andBottomOffset:8];
     [self.createAccountButton addTarget:self action:@selector(createAccountButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.createAccountButton];
     
@@ -91,7 +97,7 @@
     self.emailLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, 10, 280, 20)];
     self.emailLabel.font = FONT_SANSUMI_BOLD(12);
     self.emailLabel.textColor = rgbColor(37, 66, 97);
-    self.emailLabel.text = @"E-MAIL";
+    self.emailLabel.text = [TRANSLATE(@"E-mail") uppercaseString];
     //    self.loginTitleLabel.hidden = YES;
     self.emailLabel.backgroundColor = [UIColor clearColor];
     [self.loginView addSubview:self.emailLabel];
@@ -119,7 +125,7 @@
     self.passwordLabel = [[UILabel alloc]initWithFrame:CGRectMake(20, 70, 280, 20)];
     self.passwordLabel.font = FONT_SANSUMI_BOLD(12);
     self.passwordLabel.textColor = rgbColor(37, 66, 97);
-    self.passwordLabel.text = @"PASSWORD";
+    self.passwordLabel.text = [TRANSLATE(@"Password") uppercaseString];
     //    self.loginTitleLabel.hidden = YES;
     self.passwordLabel.backgroundColor = [UIColor clearColor];
     [self.loginView addSubview:self.passwordLabel];
@@ -149,7 +155,7 @@
     self.signInButton.backgroundColor = [UIColor whiteColor];
     self.signInButton.titleColor = rgbColor(37, 66, 97);
     self.signInButton.titleLabel.font = FONT_SANSUMI_BOLD(14);
-    self.signInButton.title = @"SIGN IN";
+    self.signInButton.title = [TRANSLATE(@"Sign in") uppercaseString];
     self.signInButton.enabled = YES;
     [self.signInButton addTarget:self action:@selector(signInButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.signInButton];
@@ -160,7 +166,7 @@
     self.recoverPasswordButton.backgroundColor = [UIColor clearColor];
     self.recoverPasswordButton.titleColor = rgbColor(255, 255, 255);
     self.recoverPasswordButton.titleLabel.font = FONT_SANSUMI(10);
-    self.recoverPasswordButton.title = @"FORGOT YOUR PASSWORD?";
+    self.recoverPasswordButton.title = [TRANSLATE(@"Forgot your Password?") uppercaseString];
     self.recoverPasswordButton.enabled = YES;
     [self.recoverPasswordButton addBottomBorderWithHeight:1 andColor:[UIColor whiteColor]];
     [self.recoverPasswordButton addTarget:self action:@selector(recoveryPasswordButtonClicked:) forControlEvents:UIControlEventTouchUpInside];

@@ -11,7 +11,6 @@
 @interface SearchAnnouncementsCell : BaseCell
 @property (nonatomic, strong) UILabel *announceNameLabel;
 @property (nonatomic, strong) UILabel *announceDescLabel;
-@property (nonatomic, strong) UIButton *announcementNameBtn;
 
 @property (nonatomic, strong) NSIndexPath *indexPath;
 

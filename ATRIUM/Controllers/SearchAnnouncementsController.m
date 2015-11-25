@@ -60,6 +60,7 @@
                 self.announceNames = [[responseDic valueForKey:@"data"] valueForKey:@"title"];
                 self.createdDate = [[responseDic valueForKey:@"data"] valueForKey:@"createdAt"];
                 self.announcePhoto = [[responseDic valueForKey:@"data"] valueForKey:@"photo"];
+                self.announceText = [[responseDic valueForKey:@"data"] valueForKey:@"text"];
                 int count;
                 self.announceDescription = [[NSMutableArray alloc]initWithCapacity:0];
                 for (count = 0; count < self.announceNames.count; count++) {
@@ -208,7 +209,6 @@
     cell.indexPath = indexPath;
     if (isSearchTextFieldActive) {
         cell.announceNameLabel.text = [NSString stringWithFormat:@"%@", [usersNames objectAtIndex:indexPath.row]];
-        [cell.announcementNameBtn addTarget:self action:@selector(tableView:didDeselectRowAtIndexPath:) forControlEvents:UIControlEventTouchUpInside];
         //    cell.announceDescLabel.text = [NSString stringWithFormat:@"%@", [self.announceDescription objectAtIndex:indexPath.row]];
     } else {
         cell.announceNameLabel.text = [NSString stringWithFormat:@"%@", [self.announceNames objectAtIndex:indexPath.row]];
@@ -223,10 +223,11 @@
     NSString *title = self.announceNames[indexPath.row];
     NSString *date = self.createdDate[indexPath.row];
     NSURL *photo = self.announcePhoto[indexPath.row];
-    
+    NSString *text = self.announceText[indexPath.row];
     NSDictionary *dic = @{@"title" : title,
                           @"date" : date,
-                          @"photo" : photo};
+                          @"photo" : photo,
+                          @"text" : text};
     
     // Posting notification from another object
     

@@ -208,7 +208,7 @@
 }
 - (void)populateTextField:(CustomTextField *)textField withText:(NSString *)text {
     NSString *title = (self.isViewMode && text.length == 0) ? TRANSLATE(@"N/A") : text;
-    UIColor *color = !self.isViewMode ? [UIColor blueColor] : [UIColor blackColor];
+    UIColor *color = rgbColor(0, 52, 120);
     textField.attributedText = [NSAttributedString attributedStringWithTitle:title withTextColor:color];
 }
 - (void)populateProfessorProfileDetails {
@@ -226,7 +226,7 @@
     
     [self.profileImageView setImageWithURL:self.photoUrl placeholderImage:[UIImage imageNamed:@"add_photo_teacher.png"]
                usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    [self populateTextField:self.emailTextField withText:email];
+    [self populateTextField:self.emailTextField withText:[TRANSLATE(email) uppercaseString]];
     [self populateTextField:self.dobDateTextField withText:dob];
     [self populateTextField:self.phoneTextField withText:phone];
 }
@@ -243,8 +243,8 @@
     textField.enabled = !self.isViewMode;
     textField.borderStyle = UITextBorderStyleNone;
 //    textField.layer.borderWidth = self.isViewMode ? 0.f : 1.f;
-    textField.font = self.isViewMode ? FONT_SANSUMI(15.f) : FONT_SANSUMI(15.f);
-    textField.textColor = self.isViewMode ? [UIColor blackColor] : [UIColor blackColor];
+    textField.font = FONT_SANSUMI(16.f);;
+    textField.textColor = rgbColor(0, 52, 120);
     textField.leftViewMode = self.isViewMode ? UITextFieldViewModeNever : UITextFieldViewModeAlways;
     self.dobDateTextField.rightViewMode = !self.isViewMode ? UITextFieldViewModeNever : UITextFieldViewModeAlways;
 //    self.positionTextField.placeholder = self.isViewMode ? @"STUDENT" : @"";

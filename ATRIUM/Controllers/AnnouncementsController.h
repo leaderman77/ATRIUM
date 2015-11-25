@@ -21,11 +21,9 @@
 @interface AnnouncementsController : BaseController <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, weak) id <SearchAnnounceDelegate> announceDelegate;
 @property (nonatomic, strong) NSMutableArray *myAnnounceText;
+@property (nonatomic, strong) NSString *text;
 @property (nonatomic, strong) NSMutableArray *myAnnouncePhotos;
-
-@property (nonatomic, strong) NSMutableArray *myAnnounceTitle;
-@property (nonatomic, strong) NSMutableArray *myAnnounceCreatedDate;
-
+@property (nonatomic, strong) NSString *photos;
 @property (nonatomic, strong) NSURL *photoUrl;
 
 @property (nonatomic, strong) NSMutableArray *myAnnounceNames;

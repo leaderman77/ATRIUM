@@ -14,6 +14,9 @@
 
 #import "NewsController.h"
 
+#define ENGLISH_LANGUAGE     @"en"
+#define RUSSIAN_LANGUAGE     @"ru"
+
 @interface LanguageSelectController () <UITabBarControllerDelegate, UITabBarDelegate, UINavigationControllerDelegate>
 @property (retain, nonatomic) UILabel *languageSelectLabel;
 @property (retain, nonatomic) UILabel *orLabel;
@@ -173,7 +176,17 @@
    
 }
 - (void)russainLangButtonClicked:(id)sneder {
-    
+    self.tabBarController = [[CustomTabBarController alloc]init];
+    NSUserDefaults *userdefaults2 = [NSUserDefaults standardUserDefaults];
+    NSString *userId = [userdefaults2 objectForKey:@"userID"];
+    [[SettingsManager sharedManager]setCurrentLanguage:RUSSIAN_LANGUAGE];
+    AuthorizationController *authorizationController = [[AuthorizationController alloc]init];
+    if (userId == nil) {
+        [self.navigationController pushViewController:authorizationController animated:YES];
+    } else {
+        //        [self.navigationController pushViewController:authorizationController animated:YES];
+        [self.navigationController pushViewController:self.tabBarController animated:YES];
+    }
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

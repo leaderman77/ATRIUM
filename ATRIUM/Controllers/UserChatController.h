@@ -9,5 +9,5 @@
 #import "BaseController.h"
 
 @interface UserChatController : BaseController
-
+@property (nonatomic, strong) NSString *groupChatID;
 @end

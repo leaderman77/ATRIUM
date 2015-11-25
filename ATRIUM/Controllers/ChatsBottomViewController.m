@@ -29,7 +29,7 @@
 
 @property (nonatomic, retain) NSMutableArray *userPhoto;
 @property (strong, nonatomic) NSArray *filteredNames;
-
+@property (strong, nonatomic) NSArray *filteredGroupNames;
 @property (nonatomic, retain) NSMutableArray *groupName;
 @property (nonatomic, retain) NSMutableArray *groupFollowers;
 
@@ -174,7 +174,7 @@
     self.scrollView.showsHorizontalScrollIndicator = NO;
     [self.view addSubview:self.scrollView];
     
-    self.searchContactsTextFiled = [[CustomTextField alloc]initWithFrame:CGRectMake(10, 5, 290, 30)];
+    self.searchContactsTextFiled = [[CustomTextField alloc]initWithFrame:CGRectMake(10, 5, 300, 30)];
     self.searchContactsTextFiled.delegate = self;
     self.searchContactsTextFiled.font = FONT_SANSUMI(12);
     self.searchContactsTextFiled.textColor = [UIColor whiteColor];
@@ -185,7 +185,7 @@
     self.searchContactsTextFiled.layer.cornerRadius = 5.f;
     self.searchContactsTextFiled.layer.masksToBounds = YES;
     self.searchContactsTextFiled.returnKeyType = UIReturnKeyNext;
-    [self.searchContactsTextFiled addBottomBorderWithHeight:1.f andColor:rgbColorWithAlpha(255, 255, 255, 0.7)];
+    [self.searchContactsTextFiled addBottomBorderWithHeight:0.5f andColor:rgbColorWithAlpha(255, 255, 255, 0.5)];
     [self.scrollView addSubview:self.searchContactsTextFiled];
     
     self.chatsTableView = [[UITableView alloc] initWithFrame:CGRectMake(10, 50, self.searchContactsTextFiled.width, 120) style:UITableViewStylePlain];
@@ -201,21 +201,21 @@
 //    [self.chatsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
     [self.scrollView addSubview:self.chatsTableView];
     
-    self.searchGroupsTextFiled = [[CustomTextField alloc]initWithFrame:CGRectMake(10, self.backButton.height + 140, 290, 30)];
+    self.searchGroupsTextFiled = [[CustomTextField alloc]initWithFrame:CGRectMake(10, self.backButton.height + 140, 300, 30)];
     self.searchGroupsTextFiled.delegate = self;
     self.searchGroupsTextFiled.font = FONT_SANSUMI(12);
     self.searchGroupsTextFiled.textColor = [UIColor whiteColor];
-    self.searchGroupsTextFiled.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[TRANSLATE(@"Search Groups") uppercaseString] attributes:@{NSForegroundColorAttributeName : rgbColor(37, 66, 97)}];
+    self.searchGroupsTextFiled.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[TRANSLATE(@"Search Groups") uppercaseString] attributes:@{NSForegroundColorAttributeName : rgbColor(61, 116, 163)}];
     UIView *paddingView2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 7, 20)];
     self.searchGroupsTextFiled.leftView = paddingView2;
     self.searchGroupsTextFiled.leftViewMode = UITextFieldViewModeAlways;
     self.searchGroupsTextFiled.layer.cornerRadius = 5.f;
     self.searchGroupsTextFiled.layer.masksToBounds = YES;
     self.searchGroupsTextFiled.returnKeyType = UIReturnKeyNext;
-    [self.searchGroupsTextFiled addBottomBorderWithHeight:1.f andColor:rgbColor(37, 66, 97)];
+    [self.searchGroupsTextFiled addBottomBorderWithHeight:0.5f andColor:rgbColorWithAlpha(255, 255, 255, 0.5)];
     [self.scrollView addSubview:self.searchGroupsTextFiled];
     
-    self.groupTableView = [[UITableView alloc] initWithFrame:CGRectMake(10, self.backButton.height + 180, self.searchContactsTextFiled.width, 120) style:UITableViewStylePlain];
+    self.groupTableView = [[UITableView alloc] initWithFrame:CGRectMake(10, self.backButton.height + 180, self.searchContactsTextFiled.width, 130) style:UITableViewStylePlain];
 //    self.groupTableView.layer.borderWidth = 1;
     self.groupTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     self.groupTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -246,7 +246,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (tableView == self.chatsTableView) {
+    if (tableView == self.chatsTableView && isTableViewActive) {
         if (isSearchTextFieldActive) {
             return _filteredNames.count;
         } else {
@@ -254,7 +254,7 @@
         }
     } else {
         if (isSearchTextFieldActive) {
-            return _filteredNames.count;
+            return _filteredGroupNames.count;
         } else {
             return self.groupName.count;
         }
@@ -280,7 +280,8 @@
         cell.baseDelegate = self;
         cell.indexPath = indexPath;
         if (isSearchTextFieldActive) {
-            cell.groupName.text = [NSString stringWithFormat:@"%@", [self.filteredNames objectAtIndex:indexPath.row]];
+            DLog(@"%ld", (long)indexPath.row);
+            cell.groupName.text = [NSString stringWithFormat:@"%@", self.filteredGroupNames[indexPath.row]];
 //            cell.groupFollowers.text = [NSString stringWithFormat:@"%d %@", self.groupFollowers.count, [TRANSLATE(@"Followers") uppercaseString]];
         } else {
             cell.groupName.text = [NSString stringWithFormat:@"%@", [self.groupName objectAtIndex:indexPath.row]];
@@ -355,26 +356,30 @@
         //        NSString *substring = [NSString stringWithString:textField.text];
         //        substring = [substring stringByReplacingCharactersInRange:range withString:string];
         //        [self searchAutocompleteEntriesWithSubstring:substring];
+        [self.chatsTableView reloadData];
     }
-    [self.chatsTableView reloadData];
+    
     if ([string isEqualToString:@""]) {
         self.searchGroupsTextFiled.hidden = NO;
         isSearchTextFieldActive = NO;
-        self.chatsTableView.hidden = YES;
+        self.chatsTableView.hidden = NO;
         [self.chatsTableView reloadData];
     }
     if ([self.searchGroupsTextFiled isEqual:textField]) {
-        isTableViewActive = NO;
-        self.groupTableView.frame = CGRectMake(10, 50, self.searchContactsTextFiled.width, 320);
         self.groupTableView.hidden = NO;
+        isTableViewActive = NO;
+        
+        
         isSearchTextFieldActive = YES;
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self beginswith[cd] %@", textField.text];
-        self.filteredNames = [self.groupName filteredArrayUsingPredicate:predicate];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self beginswith[cd] %@", self.searchGroupsTextFiled.text];
+        self.filteredGroupNames = [self.groupName filteredArrayUsingPredicate:predicate];
+        [self.groupTableView reloadData];
     }
-    [self.groupTableView reloadData];
+    
     if ([string isEqualToString:@""]) {
         isSearchTextFieldActive = NO;
-        self.groupTableView.hidden = YES;
+        self.groupTableView.hidden = NO;
+        
         [self.groupTableView reloadData];
     }
 
@@ -383,6 +388,7 @@
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
     if (textField == self.searchGroupsTextFiled) {
         _chatsTableView.hidden = YES;
+        self.groupTableView.frame = CGRectMake(10, self.backButton.height + 180, self.searchContactsTextFiled.width, 320);
         [self.scrollView setContentOffset:CGPointMake(0, self.searchGroupsTextFiled.center.y-20) animated:YES];
     } else if (textField == self.searchContactsTextFiled) {
         _groupTableView.hidden = YES;

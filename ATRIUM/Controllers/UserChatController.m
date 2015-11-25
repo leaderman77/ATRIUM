@@ -51,35 +51,42 @@
     
 }
 - (void)callApiMethods {
-    [[RestClient sharedFormClient] callMethodByPath:METHOD_GET_MESSAGE withHTTPMethodType:HTTP_POST withParameters:nil
+    NSDictionary *param = @{@"groupchat" : self.groupChatID};
+    [[RestClient sharedFormClient] callMethodByPath:METHOD_GET_GROUP_CHAT_MESSAGE withHTTPMethodType:HTTP_POST withParameters:param
                                            callback:^(NSDictionary *responseDic, NSError *error) {
                                                [self.view showLoading:NO];
                                                if (!error) {
-                                                   DLog(@"success 1 fields");
-                                                   Message *message1 = [[Message alloc] init];
-                                                   message1.text = [[[responseDic valueForKey:@"data"] valueForKey:@"text"] objectAtIndex:5];
-                                                   message1.date = [NSDate date];
-                                                   message1.sender = MessageSenderSomeone;
-                                                   //    message.chat_id = _chat.identifier;
-                                                   message1.heigh = 30;
-                                                   isMySelf = NO;
-                                                   //Store Message in memory
-                                                   [self.tableArray addObject:message1];
+                                                   NSArray *array = [responseDic valueForKey:@"data"];
+                                                   if (array.count == 0) {
+                                                       return;
+                                                   } else {
+                                                       DLog(@"success 1 fields");
+                                                       Message *message1 = [[Message alloc] init];
+                                                       message1.text = [[[responseDic valueForKey:@"data"] valueForKey:@"text"] objectAtIndex:0];
+                                                       message1.date = [NSDate date];
+                                                       message1.sender = MessageSenderSomeone;
+                                                       //    message.chat_id = _chat.identifier;
+                                                       message1.heigh = 30;
+                                                       isMySelf = NO;
+                                                       //Store Message in memory
+                                                       [self.tableArray addObject:message1];
+                                                       
+                                                       //Insert Message in UI
+                                                       NSIndexPath *indexPath = [self.tableArray indexPathForMessage:message1];
+                                                       [self.chatTableView beginUpdates];
+                                                       if ([self.tableArray numberOfMessagesInSection:indexPath.section] == 1)
+                                                           [self.chatTableView insertSections:[NSIndexSet indexSetWithIndex:indexPath.section]
+                                                                             withRowAnimation:UITableViewRowAnimationNone];
+                                                       [self.chatTableView insertRowsAtIndexPaths:@[indexPath]
+                                                                                 withRowAnimation:UITableViewRowAnimationBottom];
+                                                       [self.chatTableView endUpdates];
+                                                       
+                                                       [self.chatTableView scrollToRowAtIndexPath:[self.tableArray indexPathForLastMessage]
+                                                                                 atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+                                                       
+                                                       [self.chatTableView reloadData];
+                                                   }
                                                    
-                                                   //Insert Message in UI
-                                                   NSIndexPath *indexPath = [self.tableArray indexPathForMessage:message1];
-                                                   [self.chatTableView beginUpdates];
-                                                   if ([self.tableArray numberOfMessagesInSection:indexPath.section] == 1)
-                                                       [self.chatTableView insertSections:[NSIndexSet indexSetWithIndex:indexPath.section]
-                                                                         withRowAnimation:UITableViewRowAnimationNone];
-                                                   [self.chatTableView insertRowsAtIndexPaths:@[indexPath]
-                                                                             withRowAnimation:UITableViewRowAnimationBottom];
-                                                   [self.chatTableView endUpdates];
-                                                   
-                                                   [self.chatTableView scrollToRowAtIndexPath:[self.tableArray indexPathForLastMessage]
-                                                                             atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-                                                   
-                                                   [self.chatTableView reloadData];
                                                } else {
                                                    ALERT(@"Error with saving profile.");
                                                }
@@ -137,43 +144,91 @@
 - (void)messageComposerSendMessageClickedWithMessage:(NSString *)message {
     NSUserDefaults *userdefaults2 = [NSUserDefaults standardUserDefaults];
     NSString *userId = [userdefaults2 objectForKey:@"userID"];
-    NSDictionary *param = @{@"Message[from][id]" : userId,
-                            @"Message[to][id]" : userId,
-                            @"Message[text]" : message};
+    NSDictionary *param = @{@"message[user]" : userId,
+                            @"message[groupchat]" : self.groupChatID,
+                            @"message[text]" : message,
+                            @"group" : self.groupChatID};
     
-    [[RestClient sharedFormClient] callMethodByPath:METHOD_SEND_MESSAGE withHTTPMethodType:HTTP_POST withParameters:param
+    [[RestClient sharedFormClient] callMethodByPath:METHOD_SEND_GROUP_CHAT_MESSAGE withHTTPMethodType:HTTP_POST withParameters:param
                                            callback:^(NSDictionary *responseDic, NSError *error) {
                                                [self.view showLoading:NO];
                                                if (!error) {
-                                                   DLog(@"success 1 fields");
-                                                   Message *message1 = [[Message alloc] init];
-                                                   message1.text = message;
-                                                   message1.date = [NSDate date];
-                                                   //    message.chat_id = _chat.identifier;
-                                                   message1.sender = MessageSenderMyself;
-                                                   message1.heigh = 40;
-                                                   isMySelf = YES;
-                                                   //Store Message in memory
-                                                   [self.tableArray addObject:message1];
+                                                   NSArray *array = [responseDic valueForKey:@"data"];
+                                                   if (array.count == 0) {
+                                                       return;
+                                                   } else {
+                                                       DLog(@"success 1 fields");
+                                                       Message *message1 = [[Message alloc] init];
+                                                       message1.text = [[[responseDic valueForKey:@"data"] valueForKey:@"text"] objectAtIndex:0];;
+                                                       message1.date = [NSDate date];
+                                                       //    message.chat_id = _chat.identifier;
+                                                       message1.sender = MessageSenderMyself;
+                                                       message1.heigh = 40;
+                                                       isMySelf = YES;
+                                                       //Store Message in memory
+                                                       [self.tableArray addObject:message1];
+                                                       
+                                                       //Insert Message in UI
+                                                       NSIndexPath *indexPath = [self.tableArray indexPathForMessage:message1];
+                                                       [self.chatTableView beginUpdates];
+                                                       if ([self.tableArray numberOfMessagesInSection:indexPath.section] == 1)
+                                                           [self.chatTableView insertSections:[NSIndexSet indexSetWithIndex:indexPath.section]
+                                                                             withRowAnimation:UITableViewRowAnimationNone];
+                                                       [self.chatTableView insertRowsAtIndexPaths:@[indexPath]
+                                                                                 withRowAnimation:UITableViewRowAnimationBottom];
+                                                       [self.chatTableView endUpdates];
+                                                       
+                                                       [self.chatTableView scrollToRowAtIndexPath:[self.tableArray indexPathForLastMessage]
+                                                                                 atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+                                                       
+                                                       [self.chatTableView reloadData];
+                                                   }
                                                    
-                                                   //Insert Message in UI
-                                                   NSIndexPath *indexPath = [self.tableArray indexPathForMessage:message1];
-                                                   [self.chatTableView beginUpdates];
-                                                   if ([self.tableArray numberOfMessagesInSection:indexPath.section] == 1)
-                                                       [self.chatTableView insertSections:[NSIndexSet indexSetWithIndex:indexPath.section]
-                                                                         withRowAnimation:UITableViewRowAnimationNone];
-                                                   [self.chatTableView insertRowsAtIndexPaths:@[indexPath]
-                                                                             withRowAnimation:UITableViewRowAnimationBottom];
-                                                   [self.chatTableView endUpdates];
-                                                   
-                                                   [self.chatTableView scrollToRowAtIndexPath:[self.tableArray indexPathForLastMessage]
-                                                                             atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-                                                   
-                                                   [self.chatTableView reloadData];
                                                } else {
                                                    ALERT(@"Error with saving profile.");
                                                }
                                            }];
+
+    
+//    NSUserDefaults *userdefaults2 = [NSUserDefaults standardUserDefaults];
+//    NSString *userId = [userdefaults2 objectForKey:@"userID"];
+//    NSDictionary *param = @{@"Message[from][id]" : userId,
+//                            @"Message[to][id]" : userId,
+//                            @"Message[text]" : message};
+//    
+//    [[RestClient sharedFormClient] callMethodByPath:METHOD_SEND_MESSAGE withHTTPMethodType:HTTP_POST withParameters:param
+//                                           callback:^(NSDictionary *responseDic, NSError *error) {
+//                                               [self.view showLoading:NO];
+//                                               if (!error) {
+//                                                   DLog(@"success 1 fields");
+//                                                   Message *message1 = [[Message alloc] init];
+//                                                   message1.text = message;
+//                                                   message1.date = [NSDate date];
+//                                                   //    message.chat_id = _chat.identifier;
+//                                                   message1.sender = MessageSenderMyself;
+//                                                   message1.heigh = 40;
+//                                                   isMySelf = YES;
+//                                                   //Store Message in memory
+//                                                   [self.tableArray addObject:message1];
+//                                                   
+//                                                   //Insert Message in UI
+//                                                   NSIndexPath *indexPath = [self.tableArray indexPathForMessage:message1];
+//                                                   [self.chatTableView beginUpdates];
+//                                                   if ([self.tableArray numberOfMessagesInSection:indexPath.section] == 1)
+//                                                       [self.chatTableView insertSections:[NSIndexSet indexSetWithIndex:indexPath.section]
+//                                                                         withRowAnimation:UITableViewRowAnimationNone];
+//                                                   [self.chatTableView insertRowsAtIndexPaths:@[indexPath]
+//                                                                             withRowAnimation:UITableViewRowAnimationBottom];
+//                                                   [self.chatTableView endUpdates];
+//                                                   
+//                                                   [self.chatTableView scrollToRowAtIndexPath:[self.tableArray indexPathForLastMessage]
+//                                                                             atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+//                                                   
+//                                                   [self.chatTableView reloadData];
+//                                               } else {
+//                                                   ALERT(@"Error with saving profile.");
+//                                               }
+//                                           }];
 
     
 }

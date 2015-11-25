@@ -67,7 +67,7 @@
     CGFloat textViewHeight = 160;
     
     self.groupNameLabel = [self labelWithFrame:CGRectMake(left, top, labelWidth, labelHeight)
-                                    withTitle:[TRANSLATE(@"Group Name") uppercaseString]];
+                                    withTitle:[TRANSLATE(@"Group name") uppercaseString]];
     self.groupNameLabel.textColor = rgbColor(69, 98, 138);
     
     top += self.groupNameLabel.height;
@@ -77,7 +77,7 @@
     
     top += self.groupNameTextField.height;
     self.groupDescriptionLabel = [self labelWithFrame:CGRectMake(left, top, labelWidth, labelHeight)
-                                    withTitle:[TRANSLATE(@"Group Description") uppercaseString]];
+                                    withTitle:[TRANSLATE(@"Group description") uppercaseString]];
     self.groupDescriptionLabel.textColor = rgbColor(69, 98, 138);
     
     top += self.groupDescriptionLabel.height;

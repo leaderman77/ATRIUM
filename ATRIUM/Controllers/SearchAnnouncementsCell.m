@@ -28,24 +28,16 @@
         cell = [[SearchAnnouncementsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[[SearchAnnouncementsCell class] description]];
         cell.selectionStyle = UITableViewCellAccessoryNone;
         cell.contentView.backgroundColor = rgbColor(22, 168, 235);
-        cell.announcementNameBtn = [[UIButton alloc]initWithFrame:CGRectMake(left, top, 170, 30)];
-//        cell.announcementNameBtn.layer.borderWidth = 2;
-//        [cell.announcementNameBtn addBottomBorderWithHeight:0.1 andColor:[UIColor whiteColor]];
-        cell.announcementNameBtn.backgroundColor = [UIColor clearColor];
-        //        [cell.imgButton addTarget:self action:@selector(buttonClicked:withItem:) forControlEvents:UIControlEventTouchUpInside];
-        //        [cell.contentView addSubview:cell.arrowButton];
-        
-        cell.announceNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(left, 0, cell.announcementNameBtn.width, cell.announcementNameBtn.height)];
+                
+        cell.announceNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(left, 0, 170, 30)];
         //        cell.announceDescLabel.layer.borderWidth = 1;
         cell.announceNameLabel.backgroundColor = [UIColor clearColor];
         cell.announceNameLabel.textColor = [UIColor whiteColor];
         [cell.announceNameLabel addBottomBorderWithHeight:0.5 color:[UIColor whiteColor] leftOffset:0 rightOffset:10 andBottomOffset:0];
         cell.announceNameLabel.font = FONT_SANSUMI_BOLD(14);
-        [cell.announcementNameBtn addSubview:cell.announceNameLabel];
+        [cell.contentView addSubview:cell.announceNameLabel];
         
-        [cell.contentView addSubview:cell.announcementNameBtn];
-        
-        cell.announceDescLabel = [[UILabel alloc] initWithFrame:CGRectMake(left + cell.announcementNameBtn.width + 10, top, 110, 30)];
+        cell.announceDescLabel = [[UILabel alloc] initWithFrame:CGRectMake(left + cell.announceNameLabel.width + 10, top, 110, 30)];
 //        cell.announceDescLabel.layer.borderWidth = 1;
         cell.announceDescLabel.backgroundColor = [UIColor clearColor];
         cell.announceDescLabel.textColor = [UIColor whiteColor];

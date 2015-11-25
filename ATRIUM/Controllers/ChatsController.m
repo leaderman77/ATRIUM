@@ -33,7 +33,7 @@
 @property (nonatomic, strong) NSMutableArray *rightSearchViews;
 
 @property (nonatomic, retain) UIButton *chatsSearchButton;
-
+@property (nonatomic, retain) NSArray *groupChatID;
 @property (nonatomic, retain) NSArray *groupChatTitle;
 @property (nonatomic, retain) NSArray *groupChatNumOfMembers;
 @property (nonatomic, retain) NSMutableArray *groupChatAllMembers;
@@ -98,8 +98,6 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
-    self.navigationController.navigationBar.backgroundColor = rgbColor(22, 168, 235);
-    self.navigationController.navigationBar.barTintColor = rgbColor(22, 168, 235);
     self.tabBarController.tabBar.hidden = NO;
     [self callAppMethodOfGroupChatLists];
     [self callAppMethodOfChatLists];
@@ -122,6 +120,7 @@
                                                    if (array.count == 0) {
                                                        return;
                                                    } else {
+                                                       self.groupChatID = [[responseDic valueForKey:@"data"] valueForKey:@"id"];
                                                        self.groupChatAllMembers = [[NSMutableArray alloc]init];
                                                        self.groupChatTitle = [[responseDic valueForKey:@"data"] valueForKey:@"title"];
                                                        int count;
@@ -210,7 +209,7 @@
 //        self.chatsListTableView.layer.borderWidth = 2;
     self.chatsListTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     self.chatsListTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.chatsListTableView.rowHeight = 50.f;
+    self.chatsListTableView.rowHeight = 60.f;
     self.chatsListTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.chatsListTableView setDataSource:self];
     [self.chatsListTableView setDelegate:self];
@@ -243,6 +242,8 @@
     }
     
     if (section == 1) {
+        label.textColor = rgbColor(73, 108, 148);
+        
         UIButton *addGroupChats = [[UIButton alloc] initWithFrame:CGRectMake(270, 5, 30, 30)];
         //    self.signInBtn.layer.borderWidth = 1.f;
         addGroupChats.layer.cornerRadius = 5.f;
@@ -252,6 +253,7 @@
         [addGroupChats addTarget:self action:@selector(addGroupChats:) forControlEvents:UIControlEventTouchUpInside];
         [view addSubview:addGroupChats];
     } else if (section == 2) {
+        label.textColor = rgbColor(255, 255, 255);
         UIButton *addGroups = [[UIButton alloc] initWithFrame:CGRectMake(270, 5, 30, 30)];
         //    self.signInBtn.layer.borderWidth = 1.f;
         addGroups.layer.cornerRadius = 5.f;
@@ -316,6 +318,7 @@
 {
     if (indexPath.section == 0 || indexPath.section == 1) {
         UserChatController *userChatController = [[UserChatController alloc]init];
+        userChatController.groupChatID = self.groupChatID[indexPath.row];
         if ([self.searchDelegate respondsToSelector:@selector(openUserChatController:)]) {
             [self.searchDelegate openUserChatController:userChatController];
         }

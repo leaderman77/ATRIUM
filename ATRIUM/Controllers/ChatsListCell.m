@@ -29,7 +29,7 @@
         cell.selectionStyle = UITableViewCellAccessoryNone;
         UIImageView *next = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow_forward.png"]];
         cell.accessoryView = next;
-        cell.imgButton = [[UIButton alloc]initWithFrame:CGRectMake(left, 10, 35, 35)];
+        cell.imgButton = [[UIButton alloc]initWithFrame:CGRectMake(left, 10, 50, 50)];
         cell.announceImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, cell.imgButton.width, cell.imgButton.height)];
 //        [cell.announceImageView setImage:[UIImage imageNamed:@"rained-red-rose-flowers-34592998-960-639.jpg"]];
         //    imageView.layer.borderWidth = 1;

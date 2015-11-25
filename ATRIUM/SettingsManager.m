@@ -13,9 +13,7 @@
 #define CURRENT_LANGUAGE     @"currentLanguage"
 
 #define ENGLISH_LANGUAGE     @"en"
-#define GERMAN_LANGUAGE      @"de"
-#define FRAN_LANGUAGE        @"fr"
-#define FRAN_SPAIN           @"es"
+#define RUSSIAN_LANGUAGE     @"ru"
 
 #define TOOTH_PERIO_MOVEMENT_TYPE [@"TOOTH_PERIO_MOVEMENT_TYPE" MD5]
 
@@ -37,32 +35,32 @@
 
 static SettingsManager *_instance = nil;
 
-//- (id)init {
-//    self = [super init];
-//    if (self) {
-//        _languageDict = [[NSMutableDictionary alloc] init];
-////        [self setupColors];
-//        // en, fr,es,de
-////        NSString* language = [[NSLocale preferredLanguages] objectAtIndex:0];
-////        DLog(@"%@",language);
-//        NSString *language = nil;
-//        NSError *error = nil;
-//        if (language) {
-//            NSString *path = [[NSBundle mainBundle] pathForResource:@"translate" ofType:nil];
-//
-//            NSString *temp = [[NSString alloc] initWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
-//            if (error) {
-//                DLog(@"%@", [error localizedDescription]);
-//            }
-//
-//            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[temp dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:&error];
-//            if (error) {
-//                DLog(@"JSON SERIALIZATION error: %@", [error localizedDescription]);
-//            }
-//            _languageDict = [dict objectForKey:language];
-//        }
-//
-//
+- (id)init {
+    self = [super init];
+    if (self) {
+        _languageDict = [[NSMutableDictionary alloc] init];
+//        [self setupColors];
+        // en, fr,es,de
+//        NSString* language = [[NSLocale preferredLanguages] objectAtIndex:0];
+//        DLog(@"%@",language);
+        NSString *language = CURRENT_LANGUAGE;
+        NSError *error = nil;
+        if (language) {
+            NSString *path = [[NSBundle mainBundle] pathForResource:@"translate" ofType:nil];
+
+            NSString *temp = [[NSString alloc] initWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
+            if (error) {
+                DLog(@"%@", [error localizedDescription]);
+            }
+
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[temp dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:&error];
+            if (error) {
+                DLog(@"JSON SERIALIZATION error: %@", [error localizedDescription]);
+            }
+            _languageDict = [dict objectForKey:language];
+        }
+
+
 //        NSString *countriesStr = [[NSString alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"countries" ofType:nil] encoding:NSUTF8StringEncoding error:&error];
 //        if (error) {
 //            DLog(@"%@", [error localizedDescription]);
@@ -79,22 +77,22 @@ static SettingsManager *_instance = nil;
 //        _sortedCountries = [countries sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
 //            return [obj1[@"name"] compare:obj2[@"name"]];
 //        }];
-//
-////        if ([self appLanguage]) {
-////            [self setLanguage:[self appLanguage]];
-////        } else{
-////            [self setLanguage:GERMAN_LANGUAGE];
-////        }
-//        self.fontName = @"Candara";
-//        self.boldFontName = @"Candara-Bold";
-//        if (self.treatmentViewDefaultStatus.length == 0) {
-////            self.treatmentViewDefaultStatus = PLANNED_TRANSACTION_STATUS_CODE;
+
+//        if ([self appLanguage]) {
+//            [self setLanguage:[self appLanguage]];
+//        } else{
+//            [self setLanguage:RUSSIAN_LANGUAGE];
 //        }
-////        [self setDefaultAppointmentStatusColors];
-//    }
-//
-//    return self;
-//}
+        self.fontName = @"Candara";
+        self.boldFontName = @"Candara-Bold";
+        if (self.treatmentViewDefaultStatus.length == 0) {
+//            self.treatmentViewDefaultStatus = PLANNED_TRANSACTION_STATUS_CODE;
+        }
+//        [self setDefaultAppointmentStatusColors];
+    }
+
+    return self;
+}
 
 /*- (void)setToothConditionsDic {
     if (!self.toothTypesDic) {
@@ -223,6 +221,7 @@ static SettingsManager *_instance = nil;
 
 - (void)setCurrentLanguage:(NSString *)currentLanguage {
     if (currentLanguage) {
+        _languageDict = [[NSMutableDictionary alloc] init];
         id settings = [NSUserDefaults standardUserDefaults];
         [settings setObject:currentLanguage forKey:CURRENT_LANGUAGE];
         [settings synchronize];

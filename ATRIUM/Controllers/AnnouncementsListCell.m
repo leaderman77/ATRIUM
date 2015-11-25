@@ -30,7 +30,7 @@
         cell.selectionStyle = UITableViewCellAccessoryNone;
         UIImageView *next = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow_forward.png"]];
         cell.accessoryView = next;
-        cell.imgButton = [[UIButton alloc]initWithFrame:CGRectMake(left, 10, 35, 35)];
+        cell.imgButton = [[UIButton alloc]initWithFrame:CGRectMake(left, 10, 50, 50)];
         cell.announceImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, cell.imgButton.width, cell.imgButton.height)];
         [cell.announceImageView setImage:[UIImage imageNamed:@"rained-red-rose-flowers-34592998-960-639.jpg"]];
         //    imageView.layer.borderWidth = 1;
@@ -46,8 +46,12 @@
         [cell.imgButton addTarget:self action:@selector(buttonClicked:withItem:) forControlEvents:UIControlEventTouchUpInside];
         [cell.contentView addSubview:cell.imgButton];
         
-        cell.announceNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(2 * left + cell.imgButton.width, top + 5, 280, 30)];
-        cell.announceNameLabel.font = FONT_SANSUMI_BOLD(15);
+        cell.announceNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(2 * left + cell.imgButton.width, top + 5, 250, 35)];
+//        cell.announceNameLabel.layer.borderWidth= 1;
+        cell.announceNameLabel.numberOfLines = 0.f;
+        cell.announceNameLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        cell.announceNameLabel.textAlignment = NSTextAlignmentLeft;
+        cell.announceNameLabel.font = FONT_SANSUMI_BOLD(12);
         cell.announceNameLabel.textColor = rgbColor(0, 160, 227);           //colorWithRGB(25, 94, 180);
         [cell.contentView addSubview:cell.announceNameLabel];
         

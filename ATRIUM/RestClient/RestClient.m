@@ -250,19 +250,25 @@ static NSString *const kBaseURLString = @"http://10.10.0.225:8080/services/pms/"
             NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
             [userDefaults setObject:userID forKey:@"userID"];
             [userDefaults synchronize];
+            
         }
         
         NSUserDefaults *userdefaults3 = [NSUserDefaults standardUserDefaults];
         NSString *position = [userdefaults3 objectForKey:@"position"];
         if (position == nil) {
-            NSArray *array = [[NSArray alloc]init];
-            array = [[[responseObject objectForKey:@"data"] objectAtIndex:0] objectForKey:@"position"];
-            
-            NSString *position = [NSString stringWithFormat:@"%@", array];
-            
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            [userDefaults setObject:position forKey:@"position"];
-            [userDefaults synchronize];
+            NSArray *details = [responseObject objectForKey:@"data"];
+            if (details.count == 0) {
+                return;
+            } else {
+                NSArray *array = [[NSArray alloc]init];
+                array = [[[responseObject objectForKey:@"data"] objectAtIndex:0] objectForKey:@"position"];
+                
+                NSString *position = [NSString stringWithFormat:@"%@", array];
+                
+                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+                [userDefaults setObject:position forKey:@"position"];
+                [userDefaults synchronize];
+            }
         }
         self.showErrors = YES;
         if (callback) {

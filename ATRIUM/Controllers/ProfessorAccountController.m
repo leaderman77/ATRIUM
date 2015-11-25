@@ -112,7 +112,7 @@
     [self.scrollView addSubview:self.logoutButton];
     
     self.scrollView.contentSize = CGSizeMake(0, 550);
-    self.scrollView.scrollEnabled = YES;
+    self.scrollView.scrollEnabled = !self.isViewMode;
     //    [self.scrollView setContentOffset:CGPointMake(0, 600) animated:YES];
 }
 - (void)presentImagePickerController:(UIImagePickerController *)imagePickerController {
@@ -137,6 +137,7 @@
         self.professorProfileInfoView.isViewMode = YES;
         
     }
+    self.scrollView.scrollEnabled = !self.isViewMode;
 }
 - (IBAction)backButtonClicked:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
@@ -193,8 +194,8 @@
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:TRANSLATE(@"Logging out")
                                                         message:TRANSLATE(@"Are you sure you want to log out?")
                                                        delegate:self
-                                              cancelButtonTitle:[TRANSLATE(@"Cancel") uppercaseString]
-                                              otherButtonTitles:[TRANSLATE(@"Ok") uppercaseString], nil];
+                                              cancelButtonTitle:TRANSLATE(@"Cancel")
+                                              otherButtonTitles:TRANSLATE(@"Ok"), nil];
     [alertView show];
     
 }

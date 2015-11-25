@@ -53,8 +53,8 @@
     self.topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 60)];
     self.topView.backgroundColor = rgbColor(22, 168, 235);
     
-    UIButton *titleButton = [[UIButton alloc] initWithFrame:CGRectMake(60, 25, 200, 30)];
-    titleButton.text = [TRANSLATE(@"Create New Group") uppercaseString];
+    UIButton *titleButton = [[UIButton alloc] initWithFrame:CGRectMake(50, 25, 220, 30)];
+    titleButton.text = [TRANSLATE(@"Create new group") uppercaseString];
     titleButton.titleColor = rgbColor(255, 255, 255);
     titleButton.titleLabel.font = FONT_SANSUMI_BOLD(14);
     [self.topView addSubview:titleButton];

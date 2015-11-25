@@ -44,7 +44,7 @@
     UIButton *titleButton = [[UIButton alloc] initWithFrame:CGRectMake(60, 25, 200, 30)];
     titleButton.text = [TRANSLATE(@"New Student") uppercaseString];
     titleButton.titleColor = rgbColor(69, 98, 138); 
-    titleButton.titleLabel.font = FONT_SANSUMI_BOLD(16);
+    titleButton.titleLabel.font = FONT_SANSUMI_BOLD(14);
     [self.topView addSubview:titleButton];
     
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 25, 30, 30)];

@@ -81,11 +81,12 @@
         self.isViewMode = NO;
 //        self.studentProfileInfoView.isViewMode = NO;
         [self configureNavigationBar];
+        [self configureControls];
     } else {
         self.isViewMode = YES;
         [self configureNavigationBar];
         [self.approveButton addTarget:self action:@selector(saveButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        
+        [self configureControls];
     }
     
 }
@@ -135,7 +136,7 @@
 //        self.detailsTextView.layer.borderWidth = 2;
     self.detailsTextView.backgroundColor = [UIColor whiteColor];
     self.detailsTextView.text = self.myAnnounceText;
-    self.detailsTextView.editable = self.isViewMode;
+    self.detailsTextView.editable = !self.isViewMode;
     self.detailsTextView.textColor = rgbColor(37, 66, 97);
     self.detailsTextView.scrollEnabled = YES;
     self.detailsTextView.font = FONT_SANSUMI_BOLD(15);
