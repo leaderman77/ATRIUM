@@ -8,8 +8,6 @@
 
 #import "Member.h"
 #import "Photo.h"
-#import "MemberPermission.h"
-#import "MemberEmployment.h"
 #import "Photo.h"
 
 

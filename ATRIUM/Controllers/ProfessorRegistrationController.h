@@ -7,12 +7,7 @@
 //
 
 #import "BaseController.h"
-#import "NewUserProfile.h"
-
-@class NewUserProfile;
 
 @interface ProfessorRegistrationController : BaseController
-
-//@property (nonatomic, strong) NewUserProfile *newUserProfile;
 
 @end

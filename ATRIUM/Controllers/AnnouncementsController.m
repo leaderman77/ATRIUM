@@ -15,7 +15,7 @@
 #import "AnnounceList.h"
 #import "AddAnnouncementController.h"
 
-@interface AnnouncementsController ()<AddAnnounceDelegate>
+@interface AnnouncementsController ()<AddAnnounceDelegate, AnnounceDetailsControllerDelegate>
 @property (nonatomic, strong) UIView *topView;
 
 @property (nonatomic, strong) UITableView *announceListTableView;
@@ -35,9 +35,13 @@
 
 @property (nonatomic, retain) NSMutableArray *myAnnounceTitle;
 @property (nonatomic, retain) NSMutableArray *myAnnounceCreatedDate;
-
+@property (nonatomic, retain) NSMutableArray *myAnnounceID;
 @property (nonatomic, retain) NSArray *title;
+@property (nonatomic, retain) NSArray *myAnnounceIDArray;
+@property (nonatomic, retain) NSArray *myAnnounceCreatedDateArray;
+
 @property (nonatomic, retain) NSString *myAnnounceName;
+@property (nonatomic, retain) NSString *myAnnounceIdString;
 @property (nonatomic, retain) NSString *createdDate;
 
 @end
@@ -49,47 +53,18 @@
     self.view.backgroundColor = rgbColor(255, 255, 255);
     // Do any additional setup after loading the view.
     self.myAnnounceTitle = [[NSMutableArray alloc]init];
+    self.myAnnounceID = [[NSMutableArray alloc]init];
     self.myAnnounceCreatedDate = [[NSMutableArray alloc]init];
     self.myAnnouncePhotos = [[NSMutableArray alloc]init];
     self.myAnnounceText = [[NSMutableArray alloc]init];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receiveTestNotification:)
-                                                 name:@"MyAnnouncements"
-                                               object:nil];
 
-    
     [self configureNavigationBar];
     [self callAppMethodOfAnnounce];
     [self.announceListTableView reloadData];
 }
-- (void) receiveTestNotification:(NSNotification *) notification
-{
-    NSString *title = [notification.userInfo valueForKey:@"title"];
-    NSString *date = [notification.userInfo valueForKey:@"date"];
-    NSURL *photo = [notification.userInfo valueForKey:@"photo"];
-    NSString *text = [notification.userInfo valueForKey:@"text"];
-    
-//    [self.myAnnounceTitle addObject:title];
-//    [self.myAnnounceCreatedDate addObject:date];
-//    [self.myAnnouncePhotos addObject:photo];
-    
-    [self.myAnnounceTitle insertObject:title atIndex:0];
-    [self.myAnnounceCreatedDate insertObject:date atIndex:0];
-    [self.myAnnouncePhotos insertObject:photo atIndex:0];
-    [self.myAnnounceText addObject:text];
-    
-    if ([[notification name] isEqualToString:@"MyAnnouncements"])
-        NSLog (@"Successfully received the test notification!");
-    [self.announceListTableView reloadData];
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
-}
-- (void)callAppMethodOfAnnounce {
-    [self callApiListAnnouncementMethods];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -144,21 +119,14 @@
                                                    DLog(@"success 1 fields");
                                                    NSArray *array = [responseDic valueForKey:@"data"];
                                                    if (array.count != 0) {
-                                                       self.title = [[responseDic valueForKey:@"data"] valueForKey:@"title"];
-                                                       int count;
-                                                       for (count = 0; count < self.title.count; count++) {
-                                                           self.myAnnounceName = [[[responseDic valueForKey:@"data"] valueForKey:@"title"] objectAtIndex:count];
-                                                           [self.myAnnounceTitle addObject:self.myAnnounceName];
-                                                           self.createdDate = [[[responseDic valueForKey:@"data"] valueForKey:@"createdAt"] objectAtIndex:count];
-                                                           [self.myAnnounceCreatedDate addObject:self.createdDate];
-                                                           self.text = [[[responseDic valueForKey:@"data"] valueForKey:@"text"] objectAtIndex:count];
-                                                           [self.myAnnounceText addObject:self.text];
-                                                           self.photos = [[[responseDic valueForKey:@"data"] valueForKey:@"photo"] objectAtIndex:count];
-                                                           [self.myAnnouncePhotos addObject:self.photos];
-                                                       }
+                                                       self.myAnnounceID = [[responseDic valueForKey:@"data"] valueForKey:@"id"];
+                                                       self.myAnnounceTitle = [[responseDic valueForKey:@"data"] valueForKey:@"title"];
+                                                       self.myAnnounceText = [[responseDic valueForKey:@"data"] valueForKey:@"text"];
+                                                       self.myAnnouncePhotos = [[responseDic valueForKey:@"data"] valueForKey:@"photo"];
+                                                       self.myAnnounceCreatedDate = [[responseDic valueForKey:@"data"] valueForKey:@"createdAt"];
                                                        
                                                        //                                                   self.announceList = [[AnnounceList alloc]initWithDictionary:responseDic[@"data"] error:nil];
-                                                       
+                                                   
                                                        [self configureControls];
                                                        [self.announceListTableView reloadData];
                                                    } else {
@@ -291,11 +259,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     AnnouncementDetailsController *announcementDetailsController = [[AnnouncementDetailsController alloc]init];
+    announcementDetailsController.delegate = self;
+    announcementDetailsController.announceID = self.myAnnounceID[indexPath.row];
     self.photoUrl = self.myAnnouncePhotos[indexPath.row];
     announcementDetailsController.isViewMode = YES;
     announcementDetailsController.photoUrl = self.photoUrl;
     announcementDetailsController.myAnnounceText = self.myAnnounceText[indexPath.row];
     announcementDetailsController.announceTitle = self.myAnnounceTitle[indexPath.row];
+    announcementDetailsController.isSearch = NO;
     if ([self.announceDelegate respondsToSelector:@selector(openAnnounceDetailsController:)]) {
         [self.announceDelegate openAnnounceDetailsController:announcementDetailsController];
     }
@@ -316,6 +287,19 @@
         
     }
 }
+
+#pragma mark - Announce Details Controller Delegate
+
+- (void)callAppMethodOfAnnounceByDetails {
+    [self callApiListAnnouncementMethods];
+}
+
+#pragma mark - Add Annpuncement Controller Delegate
+
+- (void)callAppMethodOfAnnounce {
+    [self callApiListAnnouncementMethods];
+}
+
 /*
 #pragma mark - Navigation
 

@@ -46,7 +46,7 @@
     //    [self setNeedsUpdateConstraints];
 }
 - (void)callApiGroupMethods {
-    [self showLoading:YES];
+//    [self showLoading:YES];
 
     
     [[RestClient sharedFormClient] callMethodByPath:METHOD_FIND_USERS withHTTPMethodType:HTTP_POST withParameters:nil callback:^(NSDictionary *responseDic, NSError *error) {
@@ -124,7 +124,7 @@
 //    self.members = [[NSMutableArray alloc]initWithObjects:@"James Bont", @"Abrahm Lincoln", nil];
     
     top += self.addMemberLabel.height;
-    self.groupTableView = [[UITableView alloc] initWithFrame:CGRectMake(left + 10, top, labelWidth, 80) style:UITableViewStyleGrouped];
+    self.groupTableView = [[UITableView alloc] initWithFrame:CGRectMake(left + 10, top, labelWidth, 80) style:UITableViewStylePlain];
 //        self.groupTableView.layer.borderWidth = 2;
     self.groupTableView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     self.groupTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];

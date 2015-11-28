@@ -47,14 +47,14 @@
         self.tableView.tableFooterView = [self.controllerDelegate footerViewForItemsController:self];
     }
 
-    CGFloat top = kPortraitNavbarHeight;
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, top, self.view.width, self.view.height - top)];
-    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.tableView.separatorInset = UIEdgeInsetsZero;
-    self.tableView.rowHeight = _tableViewRowHeight > 0 ? _tableViewRowHeight : 44.f;
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self.view addSubview:self.tableView];
+//    CGFloat top = kPortraitNavbarHeight;
+//    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, top, self.view.width, self.view.height - top)];
+//    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//    self.tableView.separatorInset = UIEdgeInsetsZero;
+//    self.tableView.rowHeight = _tableViewRowHeight > 0 ? _tableViewRowHeight : 44.f;
+//    self.tableView.delegate = self;
+//    self.tableView.dataSource = self;
+//    [self.view addSubview:self.tableView];
 }
 
 - (void)reloadData {

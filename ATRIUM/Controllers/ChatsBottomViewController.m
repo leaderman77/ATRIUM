@@ -65,8 +65,6 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
-
-//    self.view.backgroundColor = rgbColor(22, 168, 235);
     
 }
 - (void)callApiMethods {
@@ -196,7 +194,7 @@
     self.chatsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.chatsTableView.delegate = self;
     self.chatsTableView.dataSource = self;
-//    self.chatsTableView.hidden = YES;
+    self.chatsTableView.hidden = YES;
     self.chatsTableView.backgroundColor = rgbColor(22, 168, 235);
 //    [self.chatsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
     [self.scrollView addSubview:self.chatsTableView];
@@ -223,7 +221,7 @@
     self.groupTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.groupTableView.delegate = self;
     self.groupTableView.dataSource = self;
-//    self.groupTableView.hidden = YES;
+    self.groupTableView.hidden = YES;
     self.groupTableView.backgroundColor = rgbColor(22, 168, 235);
 //    [self.groupTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
     [self.scrollView addSubview:self.groupTableView];

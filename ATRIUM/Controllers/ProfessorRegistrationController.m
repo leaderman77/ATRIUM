@@ -7,12 +7,10 @@
 //
 
 #import "ProfessorRegistrationController.h"
-#import "ItemsPopover.h"
-//#import "HomeViewTabBarController.h"
 #import "ChatsBottomView.h"
 #import "ProfessorRegistrationInfoView.h"
 
-@interface ProfessorRegistrationController () <UITextFieldDelegate, ItemsPopoverDelegate, UIPopoverPresentationControllerDelegate, UIActionSheetDelegate, UIPickerViewDataSource, UIPickerViewDelegate, BaseInfoViewDelegate>
+@interface ProfessorRegistrationController () <UITextFieldDelegate, UIPopoverPresentationControllerDelegate, UIActionSheetDelegate, UIPickerViewDataSource, UIPickerViewDelegate, BaseInfoViewDelegate>
 @property (nonatomic, strong) UIView *topView;
 @property (nonatomic, strong) UIScrollView *scrollView;
 
@@ -47,7 +45,6 @@
 @property (nonatomic, retain) UIPickerView *dobPickerView;
 @property (nonatomic, retain) NSMutableArray *pickerData;
 
-@property (nonatomic, strong) ItemsPopover *itemsPopover;
 @property (nonatomic, strong) PickerPopover *datePickerPopover;
 
 @property (nonatomic, strong) ProfessorRegistrationInfoView *professorRegisterInfoView;
@@ -428,17 +425,7 @@
     
     
 }
-#pragma mark - ItemsPopoverDelegate
 
-- (void)itemsPopover:(ItemsPopover *)popover didSaveClickedWithItem:(id)item atIndex:(NSInteger)index {
-    CustomTextField *customTextField = popover.senderControl;
-    customTextField.layer.borderColor = BORDER_GRAY_COLOR.CGColor;
-    customTextField.layer.borderWidth = 1.f;
-    customTextField.tagObject = item;
-    customTextField.text = [item name];
-    customTextField.selectedIndex = @(index);
-    
-}
 #pragma UIPickerViewDataSource
 
 //Columns in picker views

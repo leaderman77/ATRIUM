@@ -31,9 +31,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 //    self.title = @"Language Selct Controller";
+    self.view.autoresizesSubviews = YES;
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleRightMargin |
+    UIViewAutoresizingFlexibleLeftMargin |
+    UIViewAutoresizingFlexibleBottomMargin;
+    
     [self configureControls];
     self.view.backgroundColor = rgbColor(22, 168, 235);
-    
 }
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -45,6 +49,7 @@
     
     //create language select button
     self.languageSelectLabel = [[UILabel alloc]initWithFrame:CGRectMake(60, 100, 300, 20)];
+    self.languageSelectLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.languageSelectLabel.font = FONT_SANSUMI(15);
     self.languageSelectLabel.textColor = rgbColor(255, 255, 255);
     self.languageSelectLabel.text = @"CHOOSE YOUR LANGUAGE";
@@ -55,7 +60,9 @@
     //create english language select button
     self.englishLangButton = [[UIButton alloc] initWithFrame:CGRectMake(30, 170, 250, 60)];
     //    self.signInBtn.layer.borderWidth = 1.f;
+    self.englishLangButton.width;
     self.englishLangButton.layer.cornerRadius = 5.f;
+    self.englishLangButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.englishLangButton.backgroundColor = [UIColor clearColor];
     self.englishLangButton.titleColor = [UIColor whiteColor];
     self.englishLangButton.titleLabel.font = FONT_SANSUMI_BOLD(20);
@@ -66,6 +73,7 @@
     
     //create or label
     self.orLabel = [[UILabel alloc]initWithFrame:CGRectMake(140, 240, 250, 20)];
+    self.orLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.orLabel.font = FONT_SANSUMI(20);
     self.orLabel.textColor = rgbColor(255, 255, 255);
     self.orLabel.text = @"OR";
@@ -77,6 +85,7 @@
     self.russianLangButton = [[UIButton alloc] initWithFrame:CGRectMake(30, 270, 250, 60)];
     //    self.signInBtn.layer.borderWidth = 1.f;
     self.russianLangButton.layer.cornerRadius = 5.f;
+    self.russianLangButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.russianLangButton.backgroundColor = [UIColor clearColor];
     self.russianLangButton.titleColor = [UIColor whiteColor];
     self.russianLangButton.titleLabel.font = FONT_SANSUMI_BOLD(20);
@@ -192,7 +201,14 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+#pragma mark - Orientation support
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+- (NSUInteger)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskAll;
+}
 /*
 #pragma mark - Navigation
 

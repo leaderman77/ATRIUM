@@ -11,16 +11,17 @@
 
 @protocol AnnounceDetailsControllerDelegate <NSObject>
 
--(void)callAppMethodOfAnnounce;
+-(void)callAppMethodOfAnnounceByDetails;
 @end
 
 @interface AnnouncementDetailsController : BaseController
 @property (nonatomic, weak) id <AnnounceDetailsControllerDelegate> delegate;
+@property (nonatomic, strong) NSString *announceID;
 @property (nonatomic, strong) NSString *myAnnounceText;
 @property (nonatomic, strong) NSString *announceTitle;
 @property (nonatomic, strong) NSString *announceCreateBy;
 @property (nonatomic, strong) NSURL *photoUrl;
 @property (nonatomic, assign) BOOL isViewMode;
-
+@property (nonatomic, assign) BOOL isSearch;
 - (void)setIsViewMode:(BOOL)isViewMode;
 @end

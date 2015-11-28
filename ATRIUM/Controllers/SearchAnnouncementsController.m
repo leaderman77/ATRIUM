@@ -8,8 +8,9 @@
 
 #import "SearchAnnouncementsController.h"
 #import "SearchAnnouncementsCell.h"
+#import "AnnouncementDetailsController.h"
 
-@interface SearchAnnouncementsController ()<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
+@interface SearchAnnouncementsController ()<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, AnnounceDetailsControllerDelegate>
 {
     NSArray *usersNames;
 //    NSArray *filteredContent;
@@ -58,6 +59,7 @@
                 DLog(@"success 1 fields");
                 //                                                   self.titleArray = [responseDic valueForKey:@"title"];
                 self.announceNames = [[responseDic valueForKey:@"data"] valueForKey:@"title"];
+                self.announceID = [[responseDic valueForKey:@"data"] valueForKey:@"id"];
                 self.createdDate = [[responseDic valueForKey:@"data"] valueForKey:@"createdAt"];
                 self.announcePhoto = [[responseDic valueForKey:@"data"] valueForKey:@"photo"];
                 self.announceText = [[responseDic valueForKey:@"data"] valueForKey:@"text"];
@@ -152,7 +154,7 @@
     self.chatsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.chatsTableView.delegate = self;
     self.chatsTableView.dataSource = self;
-//    self.chatsTableView.hidden = YES;
+    self.chatsTableView.hidden = YES;
     self.chatsTableView.backgroundColor = rgbColor(22, 168, 235);
     [self.mainView addSubview:self.chatsTableView];
 }
@@ -207,6 +209,7 @@
     SearchAnnouncementsCell *cell = [SearchAnnouncementsCell cellForTableView:tableView withItem:nil];
     cell.baseDelegate = self;
     cell.indexPath = indexPath;
+    
     if (isSearchTextFieldActive) {
         cell.announceNameLabel.text = [NSString stringWithFormat:@"%@", [usersNames objectAtIndex:indexPath.row]];
         //    cell.announceDescLabel.text = [NSString stringWithFormat:@"%@", [self.announceDescription objectAtIndex:indexPath.row]];
@@ -220,21 +223,20 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *title = self.announceNames[indexPath.row];
-    NSString *date = self.createdDate[indexPath.row];
-    NSURL *photo = self.announcePhoto[indexPath.row];
-    NSString *text = self.announceText[indexPath.row];
-    NSDictionary *dic = @{@"title" : title,
-                          @"date" : date,
-                          @"photo" : photo,
-                          @"text" : text};
+    AnnouncementDetailsController *announcementDetailsController = [[AnnouncementDetailsController alloc]init];
+    announcementDetailsController.delegate = self;
+    announcementDetailsController.announceCreateBy = self.announceDescription[indexPath.row];
+    announcementDetailsController.announceID = self.announceID[indexPath.row];
+    announcementDetailsController.announceTitle = self.announceNames[indexPath.row];
+    announcementDetailsController.myAnnounceText = self.announceText[indexPath.row];
+    self.photoUrl = self.announcePhoto[indexPath.row];
+    announcementDetailsController.isViewMode = YES;
+    announcementDetailsController.photoUrl = self.photoUrl;
+    announcementDetailsController.isViewMode = NO;
+    announcementDetailsController.isSearch = YES;
+    [self.navigationController pushViewController:announcementDetailsController animated:YES];
     
-    // Posting notification from another object
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"MyAnnouncements" object:nil userInfo:dic];
-    [self dismissViewControllerAnimated:YES completion:nil];
-
-    [self dismissViewControllerAnimated:YES completion:nil];
+//    [self dismissViewControllerAnimated:YES completion:nil];
 }
 - (void)searchAutocompleteEntriesWithSubstring:(NSString *)substring {
     
@@ -278,7 +280,9 @@
     
     return YES;
 }
-
+- (void)callAppMethodOfAnnounceByDetails {
+    [self callApiMethods];
+}
 /*
 #pragma mark - Navigation
 

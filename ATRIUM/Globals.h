@@ -272,7 +272,7 @@ typedef void (^CompletedEditBlock)(id object);
 #define METHOD_GROUP_BY_ID                      @"/getGroup"
 #define METHOD_SEND_GROUP_CHAT_MESSAGE          @"/addMessage"
 #define METHOD_GET_GROUP_CHAT_MESSAGE           @"/getGroupChatMessages"
-
+#define METHOD_UPDATE_ANNOUNCEMENT              @"/updateAd"
 
 
 

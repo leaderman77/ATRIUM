@@ -25,6 +25,8 @@
 @property (nonatomic, strong) NSMutableArray *myAnnouncePhotos;
 @property (nonatomic, strong) NSString *photos;
 @property (nonatomic, strong) NSURL *photoUrl;
+@property (nonatomic, strong) NSArray *myAnnouncePhotosArray;
+@property (nonatomic, strong) NSArray *myAnnounceTextArray;
 
 @property (nonatomic, strong) NSMutableArray *myAnnounceNames;
 
